@@ -1,0 +1,10 @@
+{
+  "bugs_song_sound": {
+    "sounds": [
+      {
+        "name": "summermodded:bugs_song",
+        "stream": true
+      }
+    ]
+  }
+}
