@@ -1,7 +1,6 @@
-package dev.armenderoian.summod.item;
+package dev.armenderoian.summod.registry;
 
 import dev.armenderoian.summod.SummerModded;
-import dev.armenderoian.summod.sound.SoundContent;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;

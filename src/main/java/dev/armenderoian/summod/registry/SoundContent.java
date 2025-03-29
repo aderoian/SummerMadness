@@ -1,4 +1,4 @@
-package dev.armenderoian.summod.sound;
+package dev.armenderoian.summod.registry;
 
 import dev.armenderoian.summod.SummerModded;
 import net.minecraft.block.jukebox.JukeboxSong;

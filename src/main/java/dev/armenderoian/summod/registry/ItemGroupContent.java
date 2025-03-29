@@ -1,4 +1,4 @@
-package dev.armenderoian.summod.item;
+package dev.armenderoian.summod.registry;
 
 import dev.armenderoian.summod.SummerModded;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
