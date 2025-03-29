@@ -16,6 +16,7 @@ public class ItemGroupContent {
                     .displayName(Text.translatable("itemgroup.summermodded"))
                     .entries((displayContext, entries) -> {
                         entries.add(ItemContent.BUGS_MUSIC_DISK);
+                        entries.add(ItemContent.DEATH_RESET_ITEM);
                     })
                     .build());
 
