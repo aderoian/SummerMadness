@@ -9,6 +9,6 @@ public class BotEventListener extends ListenerAdapter {
 
     @Override
     public void onReady(@NotNull ReadyEvent event) {
-        SummerMadness.LOGGER.info("Bot '{}' has logged in.", event.getJDA().getSelfUser().getName());
+        SummerMadness.LOGGER.info("Bot '{}' has logged in. Guilds: {}", event.getJDA().getSelfUser().getName(), event.getJDA().getGuilds().size());
     }
 }

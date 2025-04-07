@@ -24,7 +24,10 @@ public class SummerMadness implements ModInitializer {
             SERVER = server;
             postServerStart();
         });
-        ServerLifecycleEvents.SERVER_STOPPING.register(server -> SERVER = null);
+        ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
+            SERVER = null;
+            onDisable();
+        });
 
         registerConfig();
 
@@ -49,5 +52,9 @@ public class SummerMadness implements ModInitializer {
         MidnightConfig.init(SummerMadness.MOD_ID + "-server", ServerConfig.class);
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT)
             MidnightConfig.init(SummerMadness.MOD_ID + "-client", ClientConfig.class);
+    }
+
+    public static void onDisable() {
+        ModFeatureContent.onDisable();
     }
 }

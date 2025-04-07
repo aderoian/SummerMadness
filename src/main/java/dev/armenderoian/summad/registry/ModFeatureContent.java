@@ -12,4 +12,10 @@ public class ModFeatureContent {
         DeathFeature.registerDeathFeature();
         DiscordFeature.registerDiscordFeature();
     }
+
+    public static void onDisable() {
+        SummerMadness.LOGGER.info("Disabling mod features for '" + SummerMadness.MOD_ID + "'.");
+
+        DiscordFeature.onDisable();
+    }
 }
