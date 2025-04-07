@@ -1,6 +1,6 @@
-package dev.armenderoian.summod.registry;
+package dev.armenderoian.summad.registry;
 
-import dev.armenderoian.summod.SummerModded;
+import dev.armenderoian.summad.SummerMadness;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -11,9 +11,9 @@ import net.minecraft.util.Identifier;
 
 public class ItemGroupContent {
 
-    public static ItemGroup SUMMER_MODDED_GROUP = registerItemGroup("summermodded_group",
+    public static ItemGroup SUMMER_MODDED_GROUP = registerItemGroup("summermadness_group",
             FabricItemGroup.builder().icon(() -> new ItemStack(ItemContent.BUGS_MUSIC_DISK))
-                    .displayName(Text.translatable("itemgroup.summermodded"))
+                    .displayName(Text.translatable("itemgroup.summermadness"))
                     .entries((displayContext, entries) -> {
                         entries.add(ItemContent.BUGS_MUSIC_DISK);
                         entries.add(ItemContent.DEATH_RESET_ITEM);
@@ -21,10 +21,10 @@ public class ItemGroupContent {
                     .build());
 
     public static void registerItemGroups() {
-        SummerModded.LOGGER.info("Registering item groups for '" + SummerModded.MOD_ID + "'.");
+        SummerMadness.LOGGER.info("Registering item groups for '" + SummerMadness.MOD_ID + "'.");
     }
 
     public static ItemGroup registerItemGroup(String name, ItemGroup group) {
-        return Registry.register(Registries.ITEM_GROUP, Identifier.of(SummerModded.MOD_ID, name), group);
+        return Registry.register(Registries.ITEM_GROUP, Identifier.of(SummerMadness.MOD_ID, name), group);
     }
 }

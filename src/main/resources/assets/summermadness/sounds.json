@@ -2,7 +2,7 @@
   "bugs_song_sound": {
     "sounds": [
       {
-        "name": "summermodded:bugs_song",
+        "name": "summermadness:bugs_song",
         "stream": true
       }
     ]

@@ -1,7 +1,7 @@
-package dev.armenderoian.summod.registry;
+package dev.armenderoian.summad.registry;
 
-import dev.armenderoian.summod.SummerModded;
-import dev.armenderoian.summod.custom.item.DeathResetItem;
+import dev.armenderoian.summad.SummerMadness;
+import dev.armenderoian.summad.custom.item.DeathResetItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -17,10 +17,10 @@ public class ItemContent {
             new DeathResetItem(new Item.Settings().rarity(Rarity.RARE).maxCount(1)));
 
     public static void registerItems() {
-        SummerModded.LOGGER.info("Registering items for '" + SummerModded.MOD_ID + "'.");
+        SummerMadness.LOGGER.info("Registering items for '" + SummerMadness.MOD_ID + "'.");
     }
 
     private static Item registerItem(String name, Item item) {
-        return Registry.register(Registries.ITEM, Identifier.of(SummerModded.MOD_ID, name), item);
+        return Registry.register(Registries.ITEM, Identifier.of(SummerMadness.MOD_ID, name), item);
     }
 }

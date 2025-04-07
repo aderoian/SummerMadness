@@ -1,7 +1,6 @@
-package dev.armenderoian.summod.custom.item;
+package dev.armenderoian.summad.custom.item;
 
-import dev.armenderoian.summod.SummerModded;
-import dev.armenderoian.summod.feature.death.DeathFeature;
+import dev.armenderoian.summad.feature.death.DeathFeature;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -38,6 +37,6 @@ public class DeathResetItem extends Item {
 
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-        tooltip.add(Text.translatable("item.summermodded.death_reset_item.desc").setStyle(Style.EMPTY.withColor(Formatting.GRAY).withItalic(true)));
+        tooltip.add(Text.translatable("item.summermadness.death_reset_item.desc").setStyle(Style.EMPTY.withColor(Formatting.GRAY).withItalic(true)));
     }
 }

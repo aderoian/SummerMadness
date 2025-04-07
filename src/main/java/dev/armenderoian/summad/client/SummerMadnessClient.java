@@ -1,8 +1,8 @@
-package dev.armenderoian.summod.client;
+package dev.armenderoian.summad.client;
 
 import net.fabricmc.api.ClientModInitializer;
 
-public class SummerModdedClient implements ClientModInitializer {
+public class SummerMadnessClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {

@@ -1,16 +1,15 @@
-package dev.armenderoian.summod;
+package dev.armenderoian.summad;
 
-import dev.armenderoian.summod.registry.*;
+import dev.armenderoian.summad.registry.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SummerModded implements ModInitializer {
+public class SummerMadness implements ModInitializer {
 
-    public static final String MOD_ID = "summermodded";
+    public static final String MOD_ID = "summermadness";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static MinecraftServer SERVER;
 

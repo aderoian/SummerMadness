@@ -1,6 +1,6 @@
-package dev.armenderoian.summod.feature.death;
+package dev.armenderoian.summad.feature.death;
 
-import dev.armenderoian.summod.SummerModded;
+import dev.armenderoian.summad.SummerMadness;
 import net.minecraft.scoreboard.ScoreboardCriterion;
 import net.minecraft.scoreboard.ScoreboardDisplaySlot;
 import net.minecraft.scoreboard.ScoreboardObjective;
@@ -31,7 +31,7 @@ public class DeathFeature {
     }
 
     private static ScoreboardObjective getOrCreateScoreboard() {
-        var server = SummerModded.SERVER;
+        var server = SummerMadness.SERVER;
         if (server == null) {
             throw new IllegalStateException("Server is not initialized");
         }
@@ -43,7 +43,7 @@ public class DeathFeature {
             objective = scoreboard.addObjective(
                     "deaths",
                     ScoreboardCriterion.DEATH_COUNT,
-                    Text.translatable("scoreboard.summermodded.deaths.name"),
+                    Text.translatable("scoreboard.summermadness.deaths.name"),
                     ScoreboardCriterion.RenderType.INTEGER,
                     true,
                     null

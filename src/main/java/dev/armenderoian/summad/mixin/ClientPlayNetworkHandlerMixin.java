@@ -1,7 +1,7 @@
-package dev.armenderoian.summod.mixin;
+package dev.armenderoian.summad.mixin;
 
-import dev.armenderoian.summod.feature.death.DeathFeature;
-import dev.armenderoian.summod.registry.ItemContent;
+import dev.armenderoian.summad.feature.death.DeathFeature;
+import dev.armenderoian.summad.registry.ItemContent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.world.ClientWorld;

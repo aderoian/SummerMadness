@@ -1,0 +1,10 @@
+{
+  "scoreboard.summermadness.deaths.name": "Death Count",
+
+  "item.summermadness.bugs_music_disc": "Music Disc",
+  "item.summermadness.bugs_music_disc.desc": "Bugs - Special thanks to Korhan",
+  "item.summermadness.death_reset_item": "Death Reset",
+  "item.summermadness.death_reset_item.desc": "Use this item to decreases your death count by one.",
+
+  "itemgroup.summermadness": "Summer Modded"
+}
