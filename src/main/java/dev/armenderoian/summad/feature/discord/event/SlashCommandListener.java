@@ -4,7 +4,6 @@ import dev.armenderoian.summad.feature.discord.DiscordFeature;
 import dev.armenderoian.summad.util.ServerConfig;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.utils.messages.MessageEditData;
 
 public class SlashCommandListener extends ListenerAdapter {
     @Override
@@ -17,7 +16,7 @@ public class SlashCommandListener extends ListenerAdapter {
                         .queue();
                 break;
             case "status":
-                DiscordFeature.sendStatusMessage();
+                DiscordFeature.STATUS_MESSAGE_MODULE.sendStatusMessage();
                 event.reply("Send a status update.").setEphemeral(true).queue();
                 break;
         }

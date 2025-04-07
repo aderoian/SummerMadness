@@ -1,5 +1,6 @@
 package dev.armenderoian.summad.feature.combat;
 
+import dev.armenderoian.summad.feature.AbstractFeature;
 import dev.armenderoian.summad.util.ServerConfig;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -14,11 +15,16 @@ import java.time.Instant;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class CombatLoggerFeature {
+public class CombatLoggerFeature extends AbstractFeature {
 
     private static final ConcurrentHashMap<UUID, Instant> combatSessions = new ConcurrentHashMap<>();
 
-    public static void registerCombatLogger() {
+    public CombatLoggerFeature(String name) {
+        super(name);
+    }
+
+    @Override
+    public void registerFeature() throws Exception {
         ServerLivingEntityEvents.AFTER_DAMAGE.register(CombatLoggerFeature::afterDamage);
         ServerLivingEntityEvents.AFTER_DEATH.register(CombatLoggerFeature::afterDeath);
         ServerPlayConnectionEvents.DISCONNECT.register(CombatLoggerFeature::afterDisconnect);
@@ -28,7 +34,7 @@ public class CombatLoggerFeature {
         var uuid = serverPlayNetworkHandler.getPlayer().getUuid();
         if (combatSessions.containsKey(uuid)) {
             var lastCombatTime = combatSessions.get(uuid);
-            if (Duration.between(lastCombatTime, Instant.now()).abs().compareTo(Duration.ofSeconds(ServerConfig.combatLoggerCooldown)) < 0){
+            if (Duration.between(lastCombatTime, Instant.now()).abs().compareTo(Duration.ofSeconds(ServerConfig.combatLoggerCooldown)) < 0) {
                 serverPlayNetworkHandler.getPlayer().kill();
             }
             combatSessions.remove(serverPlayNetworkHandler.getPlayer().getUuid());

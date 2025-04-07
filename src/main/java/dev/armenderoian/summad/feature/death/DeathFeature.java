@@ -1,28 +1,35 @@
 package dev.armenderoian.summad.feature.death;
 
 import dev.armenderoian.summad.SummerMadness;
+import dev.armenderoian.summad.feature.AbstractFeature;
 import net.minecraft.scoreboard.ScoreboardCriterion;
 import net.minecraft.scoreboard.ScoreboardDisplaySlot;
 import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
-public class DeathFeature {
+public class DeathFeature extends AbstractFeature {
 
     public static byte USE_DEATH_RESET_ITEM_STATUS = 66;
 
-    public static ScoreboardObjective DEATH_SCOREBOARD;
+    public ScoreboardObjective deathScoreboard;
 
-    public static void registerDeathFeature() {
-        DEATH_SCOREBOARD = getOrCreateScoreboard();
+    public DeathFeature(String name) {
+        super(name);
     }
 
-    public static boolean reduceDeathCount(ServerPlayerEntity player) {
-        if (DEATH_SCOREBOARD == null) {
+    @Override
+    public void registerFeature() throws Exception {
+        deathScoreboard = getOrCreateScoreboard();
+    }
+
+    public boolean reduceDeathCount(ServerPlayerEntity player) {
+        if (deathScoreboard == null) {
             return false;
         }
 
-        var currentDeaths = DEATH_SCOREBOARD.getScoreboard().getOrCreateScore(player, DEATH_SCOREBOARD);
+        var currentDeaths = deathScoreboard.getScoreboard().getOrCreateScore(player, deathScoreboard);
         if (currentDeaths.getScore() > 0) {
             currentDeaths.incrementScore(-1);
             return true;
@@ -30,7 +37,7 @@ public class DeathFeature {
         return false;
     }
 
-    private static ScoreboardObjective getOrCreateScoreboard() {
+    private ScoreboardObjective getOrCreateScoreboard() {
         var server = SummerMadness.SERVER;
         if (server == null) {
             throw new IllegalStateException("Server is not initialized");
@@ -53,5 +60,9 @@ public class DeathFeature {
         }
 
         return objective;
+    }
+
+    public ScoreboardObjective getDeathScoreboard() {
+        return deathScoreboard;
     }
 }

@@ -1,6 +1,7 @@
 package dev.armenderoian.summad.custom.item;
 
 import dev.armenderoian.summad.feature.death.DeathFeature;
+import dev.armenderoian.summad.registry.ModFeatureContent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,7 +26,7 @@ public class DeathResetItem extends Item {
         if (world.isClient) return TypedActionResult.pass(user.getStackInHand(hand));
 
         if (user instanceof ServerPlayerEntity player) {
-            if (DeathFeature.reduceDeathCount(player)) {
+            if (ModFeatureContent.DEATH_FEATURE.reduceDeathCount(player)) {
                 player.getStackInHand(hand).decrement(1);
                 world.sendEntityStatus(player, DeathFeature.USE_DEATH_RESET_ITEM_STATUS);
                 return TypedActionResult.success(player.getStackInHand(hand));
