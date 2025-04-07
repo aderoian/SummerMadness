@@ -15,4 +15,6 @@ public class ServerConfig extends MidnightConfig {
     @Entry
     public static int statusUpdateInterval = 30; // in seconds
 
+    @Entry
+    public static int combatLoggerCooldown = 5; // in seconds
 }

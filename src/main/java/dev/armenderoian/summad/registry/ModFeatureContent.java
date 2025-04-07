@@ -1,6 +1,7 @@
 package dev.armenderoian.summad.registry;
 
 import dev.armenderoian.summad.SummerMadness;
+import dev.armenderoian.summad.feature.combat.CombatLoggerFeature;
 import dev.armenderoian.summad.feature.death.DeathFeature;
 import dev.armenderoian.summad.feature.discord.DiscordFeature;
 
@@ -10,6 +11,7 @@ public class ModFeatureContent {
         SummerMadness.LOGGER.info("Registering mod features for '" + SummerMadness.MOD_ID + "'.");
 
         DeathFeature.registerDeathFeature();
+        CombatLoggerFeature.registerCombatLogger();
         DiscordFeature.registerDiscordFeature();
     }
 
