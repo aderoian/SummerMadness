@@ -1,7 +1,7 @@
 package dev.armenderoian.summad.feature.leaderboard.types;
 
 import dev.armenderoian.summad.feature.leaderboard.Leaderboard;
-import dev.armenderoian.summad.util.cache.GenericDataCache;
+import dev.armenderoian.summad.util.cache.DataCache;
 import dev.armenderoian.summad.util.cache.KnownPlayerCache;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public abstract class AbstractLeaderboard<T> implements Leaderboard<T> {
 
     protected String id, name, description;
-    private LeaderboardEntry[] entries;
+    private LeaderboardEntry[] entries = new LeaderboardEntry[0];
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
     public AbstractLeaderboard(String id, String name, String description) {
@@ -60,11 +60,14 @@ public abstract class AbstractLeaderboard<T> implements Leaderboard<T> {
     }
 
     @Override
-    public void updateLeaderboard(GenericDataCache<UUID, T> cache) {
+    public void updateLeaderboard(DataCache<UUID, T> cache) {
         var newEntries = cache.getCache().keySet().stream()
                 .map(t -> new LeaderboardEntry(KnownPlayerCache.getKnownPlayer(t), loadValueForPlayer(t, cache)))
                 .sorted(this::compare)
                 .toArray(LeaderboardEntry[]::new);
+//        if (newEntries.length == 0) {
+//            return;
+//        }
         setEntries(newEntries);
     }
 
@@ -87,22 +90,27 @@ public abstract class AbstractLeaderboard<T> implements Leaderboard<T> {
         var embed = new EmbedBuilder()
                 .setTitle(name)
                 .setDescription(description)
-                .setColor(Color.CYAN)
+                .setColor(getColor())
                 .setFooter("Last updated")
                 .setTimestamp(Instant.now());
 
         for (int i = 0; i < Math.min(lines, entries.length); i++) {
             var entry = entries[i];
-            embed.addField(entry.player().name(), formatValue(entry), true);
+            embed.addField((i+1) + ". " + entry.player().name(), formatValue(entry), false);
         }
 
         return embed.build();
     }
 
-    protected abstract int loadValueForPlayer(UUID uuid, GenericDataCache<UUID, T> cache);
+    protected abstract int loadValueForPlayer(UUID uuid, DataCache<UUID, T> cache);
 
     protected abstract int compare(LeaderboardEntry entry1, LeaderboardEntry entry2);
 
     protected abstract String formatLine(LeaderboardEntry entry, int lineNumber);
+
     protected abstract String formatValue(LeaderboardEntry entry);
+
+    protected Color getColor() {
+        return Color.CYAN;
+    }
 }

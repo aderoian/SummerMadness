@@ -37,7 +37,7 @@ public class StatusMessageModule extends DiscordModule {
 
     @Override
     public void stop() throws Exception {
-        sendStatusMessage();
+        sendStatusMessage(false);
         if (updateTask != null) {
             updateTask.cancel(true);
         }

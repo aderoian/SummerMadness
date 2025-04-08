@@ -5,7 +5,6 @@ import dev.armenderoian.summad.feature.AbstractFeature;
 import net.minecraft.scoreboard.ScoreboardCriterion;
 import net.minecraft.scoreboard.ScoreboardDisplaySlot;
 import net.minecraft.scoreboard.ScoreboardObjective;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
@@ -62,7 +61,7 @@ public class DeathFeature extends AbstractFeature {
         return objective;
     }
 
-    public ScoreboardObjective getDeathScoreboard() {
+    public ScoreboardObjective getDeathObjective() {
         return deathScoreboard;
     }
 }

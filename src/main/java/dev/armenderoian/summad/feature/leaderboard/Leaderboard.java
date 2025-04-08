@@ -1,6 +1,6 @@
 package dev.armenderoian.summad.feature.leaderboard;
 
-import dev.armenderoian.summad.util.cache.GenericDataCache;
+import dev.armenderoian.summad.util.cache.DataCache;
 import dev.armenderoian.summad.util.cache.KnownPlayerCache;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
@@ -13,7 +13,7 @@ public interface Leaderboard<T> {
     String getDescription();
     LeaderboardEntry[] getEntries();
     void setEntries(LeaderboardEntry[] entries);
-    void updateLeaderboard(GenericDataCache<UUID, T> cache);
+    void updateLeaderboard(DataCache<UUID, T> cache);
 
     String toGameMessage(int lines);
     MessageEmbed toDiscordMessage(int lines);

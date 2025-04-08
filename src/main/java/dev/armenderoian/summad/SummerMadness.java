@@ -29,7 +29,11 @@ public class SummerMadness implements ModInitializer {
     public void onInitialize() {
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             SERVER = server;
-            postServerStart();
+            try {
+                postServerStart();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
             SERVER = null;
@@ -47,7 +51,7 @@ public class SummerMadness implements ModInitializer {
         LootTableContent.registerLootTables();
     }
 
-    public void postServerStart() {
+    public void postServerStart() throws Exception {
         if (SERVER == null) {
             throw new IllegalStateException("Server is not initialized");
         }
@@ -63,5 +67,6 @@ public class SummerMadness implements ModInitializer {
 
     public static void onDisable() {
         ModFeatureContent.onDisable();
+        SCHEDULER.shutdownNow();
     }
 }

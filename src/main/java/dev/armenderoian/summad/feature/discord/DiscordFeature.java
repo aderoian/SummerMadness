@@ -1,29 +1,29 @@
 package dev.armenderoian.summad.feature.discord;
 
+import dev.armenderoian.summad.SummerMadness;
 import dev.armenderoian.summad.feature.AbstractFeature;
 import dev.armenderoian.summad.feature.discord.event.BotEventListener;
 import dev.armenderoian.summad.feature.discord.event.SlashCommandListener;
 import dev.armenderoian.summad.feature.discord.module.DiscordModule;
+import dev.armenderoian.summad.feature.discord.module.LeaderboardModule;
 import dev.armenderoian.summad.feature.discord.module.StatusMessageModule;
 import dev.armenderoian.summad.util.ServerConfig;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.interactions.InteractionContextType;
-import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class DiscordFeature extends AbstractFeature {
 
-    private static JDA jda;
+    private JDA jda;
     private static final HashMap<String, DiscordModule> modules = new HashMap<>();
 
-    public static StatusMessageModule STATUS_MESSAGE_MODULE = registerModule("status_message", new StatusMessageModule());
+    public static final StatusMessageModule STATUS_MESSAGE_MODULE = registerModule("status_message", new StatusMessageModule());
+    public static final LeaderboardModule LEADERBOARD_MODULE = registerModule("leaderboard", new LeaderboardModule());
 
     public DiscordFeature(String name) {
         super(name);
@@ -36,37 +36,11 @@ public class DiscordFeature extends AbstractFeature {
         }
 
         var token = ServerConfig.discordToken;
-        jda = JDABuilder.createLight(token, EnumSet.of(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES))
-                .addEventListeners(new BotEventListener(), new SlashCommandListener())
-                .build();
-
-        jda.awaitReady();
-
-        var guildId = ServerConfig.discordGuildId;
-        var commands = Objects.requireNonNull(jda.getGuildById(guildId)).updateCommands();
-        commands.addCommands(
-                Commands.slash("ip", "Get the server IP address")
-                        .setContexts(InteractionContextType.GUILD)
-                        .setDefaultPermissions(DefaultMemberPermissions.ENABLED),
-                Commands.slash("join", "Get the server IP address")
-                        .setContexts(InteractionContextType.GUILD)
-                        .setDefaultPermissions(DefaultMemberPermissions.ENABLED),
-                Commands.slash("status", "Get the server status")
-                        .setContexts(InteractionContextType.GUILD)
-                        .setDefaultPermissions(DefaultMemberPermissions.ENABLED)
-        );
-
-        commands.queue();
-
-        logger.info("Starting modules...");
-        modules.forEach((name, module) -> {
-            try {
-                module.start(jda, logger);
-                logger.info("Module {} started.", name);
-            } catch (Exception e) {
-                logger.error("Failed to start module {}: {}", name, e.getMessage(), e);
-            }
-        });
+        SummerMadness.SCHEDULER.schedule(() -> {
+            jda = JDABuilder.createLight(token, EnumSet.of(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES))
+                    .addEventListeners(new BotEventListener(), new SlashCommandListener())
+                    .build();
+        }, 0, TimeUnit.SECONDS);
     }
 
     @Override
@@ -82,6 +56,10 @@ public class DiscordFeature extends AbstractFeature {
             }
         });
         jda.shutdown();
+    }
+
+    public HashMap<String, DiscordModule> getModules() {
+        return modules;
     }
 
     public static <T extends DiscordModule> T registerModule(String name, T module) {

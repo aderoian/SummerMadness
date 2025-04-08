@@ -1,6 +1,7 @@
 package dev.armenderoian.summad.feature.leaderboard;
 
-import dev.armenderoian.summad.util.cache.GenericDataCache;
+import dev.armenderoian.summad.SummerMadness;
+import dev.armenderoian.summad.util.cache.DataCache;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,12 +15,12 @@ public abstract class LeaderboardUpdater<T> {
         leaderboards.add(leaderboard);
     }
 
-    public void updateLeaderboards() {
+    public void updateLeaderboards() throws Exception {
         var cache = createCache();
         for (var leaderboard : leaderboards) {
             leaderboard.updateLeaderboard(cache);
         }
     }
 
-    protected abstract GenericDataCache<UUID, T> createCache();
+    protected abstract DataCache<UUID, T> createCache() throws Exception;
 }

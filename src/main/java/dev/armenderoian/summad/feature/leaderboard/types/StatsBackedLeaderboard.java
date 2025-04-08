@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import dev.armenderoian.summad.SummerMadness;
 import dev.armenderoian.summad.feature.leaderboard.LeaderboardUpdater;
+import dev.armenderoian.summad.util.cache.DataCache;
 import dev.armenderoian.summad.util.cache.GenericDataCache;
 import dev.armenderoian.summad.util.cache.KnownPlayerCache;
 import net.minecraft.util.WorldSavePath;
@@ -20,7 +21,7 @@ public abstract class StatsBackedLeaderboard extends AbstractLeaderboard<JsonObj
     }
 
     @Override
-    protected int loadValueForPlayer(UUID uuid, GenericDataCache<UUID, JsonObject> cache) {
+    protected int loadValueForPlayer(UUID uuid, DataCache<UUID, JsonObject> cache) {
         return cache.contains(uuid) ? loadValueFromStats(cache.get(uuid)) : 0;
     }
 
@@ -51,7 +52,7 @@ public abstract class StatsBackedLeaderboard extends AbstractLeaderboard<JsonObj
     protected abstract String getStatsName();
     protected abstract boolean isSummedValue();
 
-    public static GenericDataCache<UUID, JsonObject> createStatsCache() {
+    public static DataCache<UUID, JsonObject> createStatsCache() {
         var cache = new GenericDataCache<UUID, JsonObject>();
         KnownPlayerCache.getKnownPlayers().forEach(player -> {
             var path = getStatsFile(player.uuid());
@@ -78,7 +79,7 @@ public abstract class StatsBackedLeaderboard extends AbstractLeaderboard<JsonObj
     public static class StatsBackedLeaderboardUpdater extends LeaderboardUpdater<JsonObject> {
 
         @Override
-        protected GenericDataCache<UUID, JsonObject> createCache() {
+        protected DataCache<UUID, JsonObject> createCache() {
             return createStatsCache();
         }
     }
