@@ -1,5 +1,7 @@
 package dev.armenderoian.summad;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dev.armenderoian.summad.registry.*;
 import dev.armenderoian.summad.util.ClientConfig;
 import dev.armenderoian.summad.util.ServerConfig;
@@ -17,6 +19,7 @@ public class SummerMadness implements ModInitializer {
     public static final String MOD_ID = "summermadness";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static MinecraftServer SERVER;
+    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     @Override
     public void onInitialize() {

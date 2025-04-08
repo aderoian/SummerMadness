@@ -5,6 +5,8 @@ import dev.armenderoian.summad.feature.AbstractFeature;
 import dev.armenderoian.summad.feature.combat.CombatLoggerFeature;
 import dev.armenderoian.summad.feature.death.DeathFeature;
 import dev.armenderoian.summad.feature.discord.DiscordFeature;
+import dev.armenderoian.summad.feature.leaderboard.LeaderboardFeature;
+import dev.armenderoian.summad.util.cache.KnownPlayerCache;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,9 +17,12 @@ public class ModFeatureContent {
     public static final DeathFeature DEATH_FEATURE = registerFeature(new DeathFeature("death"));
     public static final CombatLoggerFeature COMBAT_LOGGER_FEATURE = registerFeature(new CombatLoggerFeature("combat_logger"));
     public static final DiscordFeature DISCORD_FEATURE = registerFeature(new DiscordFeature("discord"));
+    public static final LeaderboardFeature LEADERBOARD_FEATURE = registerFeature(new LeaderboardFeature("leaderboard"));
 
     public static void registerFeatures() {
         SummerMadness.LOGGER.info("Registering mod features for '" + SummerMadness.MOD_ID + "'.");
+
+        KnownPlayerCache.initCache();
 
         features.forEach((name, feature) -> {
             try {
