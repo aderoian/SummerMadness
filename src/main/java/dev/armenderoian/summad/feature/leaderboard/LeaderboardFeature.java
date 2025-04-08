@@ -9,15 +9,16 @@ import net.minecraft.server.MinecraftServer;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 
 public class LeaderboardFeature extends AbstractFeature {
     private static final Set<LeaderboardUpdater<?>> leaderboardUpdaters = new HashSet<>();
     public static StatsBackedLeaderboard.StatsBackedLeaderboardUpdater STATS_UPDATER = registerLeaderboardUpdater(new StatsBackedLeaderboard.StatsBackedLeaderboardUpdater());
     public static PlayTimeLeaderboard PLAY_TIME = registerLeaderboard(new PlayTimeLeaderboard(), STATS_UPDATER);
 
-    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private static int leaderboardCount = 0;
+
+    private ScheduledFuture<?> updateTask;
     private static final int updateInterval = ServerConfig.leaderboardUpdateInterval;
 
     public LeaderboardFeature(String name) {
@@ -26,7 +27,7 @@ public class LeaderboardFeature extends AbstractFeature {
 
     @Override
     public void onStart(MinecraftServer server) throws Exception {
-        scheduler.scheduleAtFixedRate(() -> {
+        updateTask = SummerMadness.SCHEDULER.scheduleWithFixedDelay(() -> {
             for (LeaderboardUpdater<?> updater : leaderboardUpdaters) {
                 updater.updateLeaderboards();
             }
@@ -35,7 +36,13 @@ public class LeaderboardFeature extends AbstractFeature {
 
     @Override
     public void onStop() throws Exception {
-        scheduler.shutdownNow();
+        if (updateTask != null) {
+            updateTask.cancel(true);
+        }
+    }
+
+    public static int getLeaderboardCount() {
+        return leaderboardCount;
     }
 
     public static <U, T extends LeaderboardUpdater<U>> T registerLeaderboardUpdater(T updater) {
@@ -45,6 +52,7 @@ public class LeaderboardFeature extends AbstractFeature {
 
     public static <U, T extends Leaderboard<U>> T registerLeaderboard(T leaderboard, LeaderboardUpdater<U> updater) {
         updater.registerLeaderboard(leaderboard);
+        leaderboardCount++;
         return leaderboard;
     }
 }

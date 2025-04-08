@@ -16,6 +16,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class StatusMessageModule extends DiscordModule {
@@ -24,20 +25,22 @@ public class StatusMessageModule extends DiscordModule {
     private final int statusUpdateInterval = ServerConfig.statusUpdateInterval;
     private final String serverIp = ServerConfig.serverIp;
 
-    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private ScheduledFuture<?> updateTask;
     private TextChannel statusChannel;
     private String statusMessageId = "";
     private final Instant startTime = Instant.now();
 
     @Override
     public void start() throws Exception {
-        scheduler.scheduleAtFixedRate(this::sendStatusMessage, 0, statusUpdateInterval, TimeUnit.SECONDS);
+        updateTask = SummerMadness.SCHEDULER.scheduleWithFixedDelay(this::sendStatusMessage, 0, statusUpdateInterval, TimeUnit.SECONDS);
     }
 
     @Override
     public void stop() throws Exception {
         sendStatusMessage();
-        scheduler.shutdownNow();
+        if (updateTask != null) {
+            updateTask.cancel(true);
+        }
     }
 
     public void sendStatusMessage() {

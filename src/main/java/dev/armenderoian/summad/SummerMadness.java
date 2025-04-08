@@ -14,12 +14,16 @@ import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
 public class SummerMadness implements ModInitializer {
 
     public static final String MOD_ID = "summermadness";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static MinecraftServer SERVER;
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    public static final ScheduledExecutorService SCHEDULER = Executors.newScheduledThreadPool(4);
 
     @Override
     public void onInitialize() {
