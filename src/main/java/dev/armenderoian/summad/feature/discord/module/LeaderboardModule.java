@@ -1,15 +1,12 @@
 package dev.armenderoian.summad.feature.discord.module;
 
-import dev.armenderoian.summad.feature.discord.DiscordFeature;
 import dev.armenderoian.summad.feature.leaderboard.LeaderboardFeature;
-import dev.armenderoian.summad.registry.ModFeatureContent;
 import dev.armenderoian.summad.util.ServerConfig;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LeaderboardModule extends DiscordModule {
@@ -19,6 +16,7 @@ public class LeaderboardModule extends DiscordModule {
     private final Map<String, Message> leaderboardEmbeds = new HashMap<>();
 
     private final AtomicBoolean setup = new AtomicBoolean(false);
+
     @Override
     protected void start() throws Exception {
         channel = jda.getTextChannelById(leaderboardChannelId);

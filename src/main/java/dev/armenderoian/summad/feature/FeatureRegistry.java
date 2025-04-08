@@ -3,9 +3,12 @@ package dev.armenderoian.summad.feature;
 import dev.armenderoian.summad.SummerMadness;
 import net.minecraft.server.MinecraftServer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
-public class FeatureRegistry<T extends AbstractFeature>{
+public class FeatureRegistry<T extends AbstractFeature> {
 
     private final Map<String, T> registry = new HashMap<>();
     private final Map<String, T> loaded = new HashMap<>();
@@ -19,7 +22,7 @@ public class FeatureRegistry<T extends AbstractFeature>{
         return feature;
     }
 
-    public <U extends T> U registerFeature(String name, U feature, String ...dependency) {
+    public <U extends T> U registerFeature(String name, U feature, String... dependency) {
         if (registry.containsKey(name)) {
             throw new IllegalArgumentException("Feature '" + name + "' is already registered.");
         }

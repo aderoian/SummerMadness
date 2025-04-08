@@ -1,6 +1,5 @@
 package dev.armenderoian.summad.feature.leaderboard;
 
-import dev.armenderoian.summad.SummerMadness;
 import dev.armenderoian.summad.util.cache.DataCache;
 
 import java.util.HashSet;

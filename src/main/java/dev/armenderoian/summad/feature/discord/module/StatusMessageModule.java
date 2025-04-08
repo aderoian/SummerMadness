@@ -3,7 +3,6 @@ package dev.armenderoian.summad.feature.discord.module;
 import dev.armenderoian.summad.SummerMadness;
 import dev.armenderoian.summad.util.ServerConfig;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
@@ -14,8 +13,6 @@ import net.minecraft.util.TimeHelper;
 import java.awt.*;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -121,7 +118,7 @@ public class StatusMessageModule extends DiscordModule {
                 .addField("Uptime", uptime, false)
                 .addField("TPS", running ? String.format("%.2f", tps) : "N/A", false)
                 .addField("Player Count", running ? SummerMadness.SERVER.getCurrentPlayerCount() + "/" + SummerMadness.SERVER.getMaxPlayerCount() : "0", false)
-                .addField("Players", running ? String.join(", ", SummerMadness.SERVER.getCurrentPlayerCount() > 0 ? SummerMadness.SERVER.getPlayerNames() : new String[] {"None"}) : "None", false)
+                .addField("Players", running ? String.join(", ", SummerMadness.SERVER.getCurrentPlayerCount() > 0 ? SummerMadness.SERVER.getPlayerNames() : new String[]{"None"}) : "None", false)
                 .setFooter(running ? "Last checked" : "Last online")
                 .setTimestamp(Instant.now())
                 .build();

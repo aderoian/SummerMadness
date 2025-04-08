@@ -7,7 +7,6 @@ import dev.armenderoian.summad.feature.leaderboard.types.DeathCountLeaderboard;
 import dev.armenderoian.summad.feature.leaderboard.types.ObjectiveBackedLeaderboard;
 import dev.armenderoian.summad.feature.leaderboard.types.PlayTimeLeaderboard;
 import dev.armenderoian.summad.feature.leaderboard.types.StatsBackedLeaderboard;
-import dev.armenderoian.summad.registry.ModFeatureContent;
 import dev.armenderoian.summad.util.ServerConfig;
 import net.minecraft.server.MinecraftServer;
 

@@ -9,11 +9,8 @@ import dev.armenderoian.summad.feature.discord.DiscordFeature;
 import dev.armenderoian.summad.feature.leaderboard.LeaderboardFeature;
 import dev.armenderoian.summad.util.cache.KnownPlayerCache;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class ModFeatureContent {
-    private static FeatureRegistry<AbstractFeature> featureRegistry = new FeatureRegistry<>();
+    private static final FeatureRegistry<AbstractFeature> featureRegistry = new FeatureRegistry<>();
 
     public static final DeathFeature DEATH_FEATURE = registerFeature(new DeathFeature("death"));
     public static final CombatLoggerFeature COMBAT_LOGGER_FEATURE = registerFeature(new CombatLoggerFeature("combat_logger"));
@@ -44,7 +41,7 @@ public class ModFeatureContent {
         return featureRegistry.registerFeature(feature.getName(), feature);
     }
 
-    public static <T extends AbstractFeature> T registerFeature(T feature, String ...dependencies) {
+    public static <T extends AbstractFeature> T registerFeature(T feature, String... dependencies) {
         return featureRegistry.registerFeature(feature.getName(), feature, dependencies);
     }
 }

@@ -49,7 +49,9 @@ public abstract class StatsBackedLeaderboard extends AbstractLeaderboard<JsonObj
     }
 
     protected abstract String getStatsCategory();
+
     protected abstract String getStatsName();
+
     protected abstract boolean isSummedValue();
 
     public static DataCache<UUID, JsonObject> createStatsCache() {

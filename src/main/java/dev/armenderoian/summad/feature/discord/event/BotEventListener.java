@@ -1,7 +1,6 @@
 package dev.armenderoian.summad.feature.discord.event;
 
 import dev.armenderoian.summad.SummerMadness;
-import dev.armenderoian.summad.feature.discord.DiscordFeature;
 import dev.armenderoian.summad.registry.ModFeatureContent;
 import dev.armenderoian.summad.util.ServerConfig;
 import net.dv8tion.jda.api.events.session.ReadyEvent;

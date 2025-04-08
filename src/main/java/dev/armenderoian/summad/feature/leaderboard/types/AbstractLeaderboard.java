@@ -96,7 +96,7 @@ public abstract class AbstractLeaderboard<T> implements Leaderboard<T> {
 
         for (int i = 0; i < Math.min(lines, entries.length); i++) {
             var entry = entries[i];
-            embed.addField((i+1) + ". " + entry.player().name(), formatValue(entry), false);
+            embed.addField((i + 1) + ". " + entry.player().name(), formatValue(entry), false);
         }
 
         return embed.build();

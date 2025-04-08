@@ -22,7 +22,12 @@ public abstract class AbstractFeature {
         return logger;
     }
 
-    public void registerFeature() throws Exception {}
-    public void onStart(MinecraftServer server) throws Exception {}
-    public void onStop() throws Exception {}
+    public void registerFeature() throws Exception {
+    }
+
+    public void onStart(MinecraftServer server) throws Exception {
+    }
+
+    public void onStop() throws Exception {
+    }
 }

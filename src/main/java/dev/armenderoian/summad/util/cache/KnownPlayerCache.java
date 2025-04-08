@@ -7,7 +7,6 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
-import net.minecraft.util.WorldSavePath;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
@@ -66,5 +65,6 @@ public class KnownPlayerCache {
         }
     }
 
-    public static record KnownPlayer(UUID uuid, String name) {}
+    public record KnownPlayer(UUID uuid, String name) {
+    }
 }

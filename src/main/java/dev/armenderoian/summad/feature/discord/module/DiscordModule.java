@@ -19,5 +19,6 @@ public abstract class DiscordModule {
     }
 
     protected abstract void start() throws Exception;
+
     public abstract void stop() throws Exception;
 }
