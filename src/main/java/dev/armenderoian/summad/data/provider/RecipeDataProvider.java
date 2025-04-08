@@ -1,8 +1,6 @@
-package dev.armenderoian.summad.data;
+package dev.armenderoian.summad.data.provider;
 
 import dev.armenderoian.summad.registry.ItemContent;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.data.server.recipe.RecipeExporter;
@@ -13,9 +11,9 @@ import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
 
-public class RecipeGenerator extends FabricRecipeProvider {
+public class RecipeDataProvider extends FabricRecipeProvider {
 
-    public RecipeGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+    public RecipeDataProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
         super(output, registriesFuture);
     }
 

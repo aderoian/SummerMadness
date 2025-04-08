@@ -2,12 +2,14 @@ package dev.armenderoian.summad.mixin;
 
 import dev.armenderoian.summad.feature.death.DeathFeature;
 import dev.armenderoian.summad.registry.ItemContent;
+import dev.armenderoian.summad.registry.ParticleContent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvents;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,8 +30,7 @@ public class ClientPlayNetworkHandlerMixin {
 
         if (entity != null) {
             if (packet.getStatus() == DeathFeature.USE_DEATH_RESET_ITEM_STATUS) {
-                // TODO: Retexture the totem particle
-                //client.particleManager.addEmitter(entity, ParticleTypes.TOTEM_OF_UNDYING, 30);
+                client.particleManager.addEmitter(entity, ParticleContent.DEATH_RESET_ITEM, 30);
                 this.world.playSound(entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ITEM_TOTEM_USE, entity.getSoundCategory(), 1.0f, 1.0f, false);
                 if (entity == client.player)
                     client.gameRenderer.showFloatingItem(new ItemStack(ItemContent.DEATH_RESET_ITEM));
