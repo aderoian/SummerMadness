@@ -9,11 +9,14 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import java.awt.*;
 import java.time.Instant;
 import java.util.UUID;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public abstract class AbstractLeaderboard<T> implements Leaderboard<T> {
 
     protected String id, name, description;
-    protected LeaderboardEntry[] entries;
+    private LeaderboardEntry[] entries;
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
     public AbstractLeaderboard(String id, String name, String description) {
         this.id = id;
@@ -38,15 +41,31 @@ public abstract class AbstractLeaderboard<T> implements Leaderboard<T> {
 
     @Override
     public LeaderboardEntry[] getEntries() {
-        return entries;
+        lock.readLock().lock();
+        try {
+            return entries;
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    @Override
+    public void setEntries(LeaderboardEntry[] entries) {
+        lock.writeLock().lock();
+        try {
+            this.entries = entries;
+        } finally {
+            lock.writeLock().unlock();
+        }
     }
 
     @Override
     public void updateLeaderboard(GenericDataCache<UUID, T> cache) {
-        entries = cache.getCache().keySet().stream()
+        var newEntries = cache.getCache().keySet().stream()
                 .map(t -> new LeaderboardEntry(KnownPlayerCache.getKnownPlayer(t), loadValueForPlayer(t, cache)))
                 .sorted(this::compare)
                 .toArray(LeaderboardEntry[]::new);
+        setEntries(newEntries);
     }
 
     @Override

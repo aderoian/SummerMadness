@@ -12,6 +12,7 @@ public interface Leaderboard<T> {
     String getName();
     String getDescription();
     LeaderboardEntry[] getEntries();
+    void setEntries(LeaderboardEntry[] entries);
     void updateLeaderboard(GenericDataCache<UUID, T> cache);
 
     String toGameMessage(int lines);

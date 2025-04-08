@@ -17,4 +17,9 @@ public class ServerConfig extends MidnightConfig {
 
     @Entry
     public static int combatLoggerCooldown = 5; // in seconds
+
+    @Entry
+    public static String leaderboardChannelId = "leaderboard_channel_id";
+    @Entry
+    public static int leaderboardUpdateInterval = 60 * 60; // in seconds
 }
