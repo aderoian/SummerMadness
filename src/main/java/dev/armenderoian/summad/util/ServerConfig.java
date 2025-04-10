@@ -22,4 +22,13 @@ public class ServerConfig extends MidnightConfig {
     public static String leaderboardChannelId = "leaderboard_channel_id";
     @Entry
     public static int leaderboardUpdateInterval = 60 * 60; // in seconds
+
+    @Entry
+    public static String landingPageChannelId = "landing_page_channel_id";
+    @Entry
+    public static String memberManagementChannelId = "member_management_channel_id";
+    @Entry
+    public static String[] verificationRolesToAdd = new String[0];
+    @Entry
+    public static String[] verificationRolesToRemove = new String[0];
 }

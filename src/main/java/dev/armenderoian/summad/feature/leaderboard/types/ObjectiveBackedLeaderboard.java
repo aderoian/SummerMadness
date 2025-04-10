@@ -3,9 +3,9 @@ package dev.armenderoian.summad.feature.leaderboard.types;
 import dev.armenderoian.summad.SummerMadness;
 import dev.armenderoian.summad.feature.leaderboard.LeaderboardUpdater;
 import dev.armenderoian.summad.registry.ModFeatureContent;
-import dev.armenderoian.summad.util.cache.DataCache;
-import dev.armenderoian.summad.util.cache.GenericDataCache;
-import dev.armenderoian.summad.util.cache.KnownPlayerCache;
+import dev.armenderoian.summad.util.io.cache.DataCache;
+import dev.armenderoian.summad.util.io.cache.GenericDataCache;
+import dev.armenderoian.summad.util.io.cache.KnownPlayerCache;
 import net.minecraft.scoreboard.ScoreAccess;
 
 import java.util.UUID;

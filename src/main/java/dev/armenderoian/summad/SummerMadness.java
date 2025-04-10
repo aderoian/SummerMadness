@@ -14,6 +14,7 @@ import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.file.Path;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -24,11 +25,17 @@ public class SummerMadness implements ModInitializer {
     public static MinecraftServer SERVER;
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     public static final ScheduledExecutorService SCHEDULER = Executors.newScheduledThreadPool(4);
+    public static Path DATA_PATH;
 
     @Override
     public void onInitialize() {
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             SERVER = server;
+            DATA_PATH = server.getRunDirectory().resolve("data").resolve(MOD_ID);
+            if (!DATA_PATH.toFile().exists()) {
+                DATA_PATH.toFile().mkdirs();
+            }
+
             try {
                 postServerStart();
             } catch (Exception e) {

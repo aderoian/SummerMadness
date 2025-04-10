@@ -23,7 +23,8 @@ public class BotEventListener extends ListenerAdapter {
         var modules = ModFeatureContent.DISCORD_FEATURE.getModules();
 
         var guildId = ServerConfig.discordGuildId;
-        var commands = Objects.requireNonNull(jda.getGuildById(guildId)).updateCommands();
+        var guild = jda.getGuildById(guildId);
+        var commands = Objects.requireNonNull(guild).updateCommands();
         commands.addCommands(
                 Commands.slash("ip", "Get the server IP address")
                         .setContexts(InteractionContextType.GUILD)
@@ -39,7 +40,7 @@ public class BotEventListener extends ListenerAdapter {
         logger.info("Starting modules...");
         modules.forEach((name, module) -> {
             try {
-                module.start(jda, logger);
+                module.start(jda, guild, logger);
                 logger.info("Module {} started.", name);
             } catch (Exception e) {
                 logger.error("Failed to start module {}: {}", name, e.getMessage(), e);

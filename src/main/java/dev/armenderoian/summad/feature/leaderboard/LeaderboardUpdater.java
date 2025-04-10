@@ -1,6 +1,6 @@
 package dev.armenderoian.summad.feature.leaderboard;
 
-import dev.armenderoian.summad.util.cache.DataCache;
+import dev.armenderoian.summad.util.io.cache.DataCache;
 
 import java.util.HashSet;
 import java.util.Set;

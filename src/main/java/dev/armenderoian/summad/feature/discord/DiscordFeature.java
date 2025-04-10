@@ -7,10 +7,14 @@ import dev.armenderoian.summad.feature.discord.event.SlashCommandListener;
 import dev.armenderoian.summad.feature.discord.module.DiscordModule;
 import dev.armenderoian.summad.feature.discord.module.LeaderboardModule;
 import dev.armenderoian.summad.feature.discord.module.StatusMessageModule;
+import dev.armenderoian.summad.feature.discord.module.VerificationModule;
 import dev.armenderoian.summad.util.ServerConfig;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.EnumSet;
@@ -20,10 +24,12 @@ import java.util.concurrent.TimeUnit;
 public class DiscordFeature extends AbstractFeature {
 
     private JDA jda;
+    private Guild guild;
     private static final HashMap<String, DiscordModule> modules = new HashMap<>();
 
     public static final StatusMessageModule STATUS_MESSAGE_MODULE = registerModule("status_message", new StatusMessageModule());
     public static final LeaderboardModule LEADERBOARD_MODULE = registerModule("leaderboard", new LeaderboardModule());
+    public static final VerificationModule VERIFICATION_MODULE = registerModule("verification", new VerificationModule());
 
     public DiscordFeature(String name) {
         super(name);
@@ -39,6 +45,7 @@ public class DiscordFeature extends AbstractFeature {
         SummerMadness.SCHEDULER.schedule(() -> {
             jda = JDABuilder.createLight(token, EnumSet.of(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES))
                     .addEventListeners(new BotEventListener(), new SlashCommandListener())
+                    .setMemberCachePolicy(MemberCachePolicy.ALL)
                     .build();
         }, 0, TimeUnit.SECONDS);
     }

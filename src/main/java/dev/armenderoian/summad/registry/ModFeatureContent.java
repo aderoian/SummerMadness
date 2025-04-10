@@ -7,7 +7,7 @@ import dev.armenderoian.summad.feature.combat.CombatLoggerFeature;
 import dev.armenderoian.summad.feature.death.DeathFeature;
 import dev.armenderoian.summad.feature.discord.DiscordFeature;
 import dev.armenderoian.summad.feature.leaderboard.LeaderboardFeature;
-import dev.armenderoian.summad.util.cache.KnownPlayerCache;
+import dev.armenderoian.summad.util.io.cache.KnownPlayerCache;
 
 public class ModFeatureContent {
     private static final FeatureRegistry<AbstractFeature> featureRegistry = new FeatureRegistry<>();

@@ -1,8 +1,8 @@
 package dev.armenderoian.summad.feature.leaderboard.types;
 
 import dev.armenderoian.summad.feature.leaderboard.Leaderboard;
-import dev.armenderoian.summad.util.cache.DataCache;
-import dev.armenderoian.summad.util.cache.KnownPlayerCache;
+import dev.armenderoian.summad.util.io.cache.DataCache;
+import dev.armenderoian.summad.util.io.cache.KnownPlayerCache;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 

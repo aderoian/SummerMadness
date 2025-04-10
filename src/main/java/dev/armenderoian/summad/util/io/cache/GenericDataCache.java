@@ -1,4 +1,4 @@
-package dev.armenderoian.summad.util.cache;
+package dev.armenderoian.summad.util.io.cache;
 
 import java.util.HashMap;
 import java.util.Map;
