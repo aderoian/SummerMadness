@@ -31,4 +31,9 @@ public class ServerConfig extends MidnightConfig {
     public static String[] verificationRolesToAdd = new String[0];
     @Entry
     public static String[] verificationRolesToRemove = new String[0];
+
+    @Entry
+    public static String[] allowedCommandRoles = new String[0];
+    @Entry
+    public static String[] disallowedCommandRoles = new String[0];
 }

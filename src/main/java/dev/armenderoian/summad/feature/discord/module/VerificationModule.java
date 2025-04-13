@@ -95,8 +95,18 @@ public class VerificationModule extends DiscordModule {
         database.close();
     }
 
-    private void sendWelcomeMessage() {
+    public VerifiedUserDatabase getVerifiedUserDatabase() {
+        return database;
+    }
 
+    private void sendWelcomeMessage() {
+        landingChannel.sendMessage(new MessageCreateBuilder()
+                .setEmbeds(new EmbedBuilder()
+                        .setTitle("Welcome to the Summer Madness Discord!")
+                        .setDescription("To get started, please read the rules a verify yourself by using the `/verify` command.")
+                        .setColor(Color.YELLOW)
+                        .build())
+                .build()).queue();
     }
 
     private void handleVerificationProcessInit(User user, JsonObject playerData) {
@@ -326,7 +336,7 @@ public class VerificationModule extends DiscordModule {
         event.deferEdit().queue();
     }
 
-    private static class VerifiedUserDatabase extends JSONProvider<VerifiedUserDatabaseModel> {
+    public static class VerifiedUserDatabase extends JSONProvider<VerifiedUserDatabaseModel> {
 
         public VerifiedUserDatabase() {
             super(SummerMadness.DATA_PATH.resolve("verified_users.json"));
@@ -390,11 +400,11 @@ public class VerificationModule extends DiscordModule {
         }
     }
 
-    private static class VerifiedUserDatabaseModel implements Serializable {
+    public static class VerifiedUserDatabaseModel implements Serializable {
         private Map<String, VerifiedUserData> players = new HashMap<>();
         private Map<String, String> discordLinks = new HashMap<>();
 
-        private static class VerifiedUserData implements Serializable {
+        public static class VerifiedUserData implements Serializable {
             public final String uuid;
             public final String username;
             public final String discordId;

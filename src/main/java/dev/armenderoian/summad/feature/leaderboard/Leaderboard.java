@@ -24,6 +24,8 @@ public interface Leaderboard<T> {
 
     MessageEmbed toDiscordMessage(int lines);
 
+    MessageEmbed toDiscordMessage(int lines, UUID show);
+
     record LeaderboardEntry(KnownPlayerCache.KnownPlayer player, int value) {
     }
 }

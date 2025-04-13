@@ -102,6 +102,42 @@ public abstract class AbstractLeaderboard<T> implements Leaderboard<T> {
         return embed.build();
     }
 
+    @Override
+    public MessageEmbed toDiscordMessage(int lines, UUID show) {
+        int index = -1;
+        LeaderboardEntry userEntry = null;
+        for (int i = 0; i < entries.length; i++) {
+            if (entries[i].player().uuid().equals(show)) {
+                index = i;
+                userEntry = entries[i];
+                break;
+            }
+        }
+
+        if (index != -1) {
+            var embed = new EmbedBuilder()
+                    .setTitle(name)
+                    .setDescription(description)
+                    .setColor(getColor())
+                    .setFooter("Last updated")
+                    .setTimestamp(Instant.now());
+
+            for (int i = 0; i <  Math.min(index < 10 ? lines : lines - 2, entries.length); i++) {
+                var entry = entries[i];
+                embed.addField((i + 1) + ". " + entry.player().name(), formatValue(entry), false);
+            }
+
+            if (index > 9) {
+                embed.addField("...", "", false);
+                embed.addField((index + 1) + ". " + userEntry.player().name(), formatValue(userEntry), false);
+            }
+
+            return embed.build();
+        } else {
+            return null;
+        }
+    }
+
     protected abstract int loadValueForPlayer(UUID uuid, DataCache<UUID, T> cache);
 
     protected abstract int compare(LeaderboardEntry entry1, LeaderboardEntry entry2);
