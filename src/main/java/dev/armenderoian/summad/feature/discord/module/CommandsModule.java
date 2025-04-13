@@ -25,21 +25,15 @@ public class CommandsModule extends DiscordModule {
 
     @Override
     protected void start() throws Exception {
-        guild.updateCommands().addCommands(
-                Commands.slash("join", "Get the information to join the server.")
-                        .setContexts(InteractionContextType.GUILD)
-                        .setDefaultPermissions(DefaultMemberPermissions.ENABLED),
-                Commands.slash("leaderboard", "View leaderboard information.")
-                        .setContexts(InteractionContextType.GUILD)
-                        .setDefaultPermissions(DefaultMemberPermissions.ENABLED)
-                        .addOptions(new OptionData(OptionType.STRING, "name", "The leaderboard you wish to view.", true)
-                                        .addChoices(LeaderboardFeature.getLeaderboards().stream().map(lb -> new Command.Choice(lb.getName(), lb.getId())).toList()),
-                                new OptionData(OptionType.USER, "user", "See a user's position on the leaderboard", false))
-        ).queue(
-                success -> {
-                },
-                failure -> logger.error("Failed to register slash commands.", failure)
-        );
+        guild.upsertCommand(Commands.slash("join", "Get the information to join the server.")
+                .setContexts(InteractionContextType.GUILD)
+                .setDefaultPermissions(DefaultMemberPermissions.ENABLED)).queue();
+        guild.upsertCommand(Commands.slash("leaderboard", "View leaderboard information.")
+                .setContexts(InteractionContextType.GUILD)
+                .setDefaultPermissions(DefaultMemberPermissions.ENABLED)
+                .addOptions(new OptionData(OptionType.STRING, "name", "The leaderboard you wish to view.", true)
+                                .addChoices(LeaderboardFeature.getLeaderboards().stream().map(lb -> new Command.Choice(lb.getName(), lb.getId())).toList()),
+                        new OptionData(OptionType.USER, "user", "See a user's position on the leaderboard", false))).queue();
 
         allowedRoles = Arrays.stream(ServerConfig.allowedCommandRoles).map(id -> guild.getRoleById(id)).toArray(Role[]::new);
         disallowedRoles = Arrays.stream(ServerConfig.disallowedCommandRoles).map(id -> guild.getRoleById(id)).toArray(Role[]::new);

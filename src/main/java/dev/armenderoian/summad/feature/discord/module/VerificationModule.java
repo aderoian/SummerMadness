@@ -73,11 +73,14 @@ public class VerificationModule extends DiscordModule {
             throw new IllegalStateException("Verification channel not found");
         }
 
-        Objects.requireNonNull(jda.getGuildById(ServerConfig.discordGuildId)).updateCommands()
-                        .addCommands(Commands.slash("verify", "Verify yourself to get access to the server")
+        Objects.requireNonNull(jda.getGuildById(ServerConfig.discordGuildId))
+                        .upsertCommand(Commands.slash("verify", "Verify yourself to get access to the server")
                                 .setContexts(InteractionContextType.GUILD)
                                 .setDefaultPermissions(DefaultMemberPermissions.ENABLED)
-                                .addOption(OptionType.STRING, "username", "Your Minecraft Java username.", true)).queue();
+                                .addOption(OptionType.STRING, "username", "Your Minecraft Java username.", true)).queue(
+                                        success -> {},
+                                        throwable -> logger.error("Failed to register command", throwable)
+                );
 
         verificationRolesToAdd = Arrays.stream(ServerConfig.verificationRolesToAdd)
                 .map(roleId -> Objects.requireNonNull(guild.getRoleById(roleId)))

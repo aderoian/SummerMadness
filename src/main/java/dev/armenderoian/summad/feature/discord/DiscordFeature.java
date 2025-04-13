@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class DiscordFeature extends AbstractFeature {
@@ -83,6 +84,16 @@ public class DiscordFeature extends AbstractFeature {
 
             var modules = ModFeatureContent.DISCORD_FEATURE.getModules();
             guild = jda.getGuildById(ServerConfig.discordGuildId);
+
+            if (guild == null) {
+                logger.error("Guild not found. Please check your configuration.");
+                return;
+            }
+
+            // sync commands
+            // removes all commands and allows the modules to add their own
+            jda.updateCommands().addCommands(List.of()).queue(); // should never have global commands
+            guild.updateCommands().addCommands(List.of()).queue();
 
             logger.info("Starting modules...");
             modules.forEach((name, module) -> {
