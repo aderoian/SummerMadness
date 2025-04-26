@@ -30,6 +30,7 @@ public class DiscordFeature extends AbstractFeature {
     public static final LeaderboardModule LEADERBOARD_MODULE = registerModule("leaderboard", new LeaderboardModule());
     public static final VerificationModule VERIFICATION_MODULE = registerModule("verification", new VerificationModule());
     public static final CommandsModule COMMANDS_MODULE = registerModule("commands", new CommandsModule());
+    public static final MessageModule MESSAGE_MODULE = registerModule("message", new MessageModule());
 
     public DiscordFeature(String name) {
         super(name);
@@ -43,7 +44,7 @@ public class DiscordFeature extends AbstractFeature {
 
         var token = ServerConfig.discordToken;
         SummerMadness.SCHEDULER.schedule(() -> {
-            jda = JDABuilder.createLight(token, EnumSet.of(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES))
+            jda = JDABuilder.createLight(token, EnumSet.of(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT))
                     .addEventListeners(new BotEventListener())
                     .setMemberCachePolicy(MemberCachePolicy.ALL)
                     .build();

@@ -36,4 +36,9 @@ public class ServerConfig extends MidnightConfig {
     public static String[] allowedCommandRoles = new String[0];
     @Entry
     public static String[] disallowedCommandRoles = new String[0];
+
+    @Entry
+    public static String rulesMessageChannelId = "rules_message_channel_id";
+    @Entry
+    public static String landingMessageChannelId = "landing_message_channel_id";
 }

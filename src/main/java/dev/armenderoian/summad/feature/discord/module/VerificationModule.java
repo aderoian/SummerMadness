@@ -6,7 +6,6 @@ import dev.armenderoian.summad.SummerMadness;
 import dev.armenderoian.summad.util.ServerConfig;
 import dev.armenderoian.summad.util.io.database.JSONProvider;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
@@ -39,8 +38,6 @@ public class VerificationModule extends DiscordModule {
     private final VerifiedUserDatabase database = new VerifiedUserDatabase();
 
     private final String landingPageChannelId = ServerConfig.landingPageChannelId;
-    private TextChannel landingChannel;
-    private Message landingMessage;
 
     private final String memberManagementChannelId = ServerConfig.memberManagementChannelId;
     private TextChannel memberManagementChannel;
@@ -52,21 +49,6 @@ public class VerificationModule extends DiscordModule {
     @Override
     protected void start() throws Exception {
         database.open();
-
-        landingChannel = jda.getTextChannelById(landingPageChannelId);
-        if (landingChannel == null) {
-            throw new IllegalStateException("Landing page channel not found");
-        }
-
-        landingChannel.getHistory().retrievePast(1).queue(history -> {
-            if (history.isEmpty()) {
-                sendWelcomeMessage();
-            } else {
-                landingMessage = history.getFirst();
-            }
-        }, throwable -> {
-            logger.error("Error while retrieving history", throwable);
-        });
 
         memberManagementChannel = jda.getTextChannelById(memberManagementChannelId);
         if (memberManagementChannel == null) {
@@ -99,16 +81,6 @@ public class VerificationModule extends DiscordModule {
 
     public VerifiedUserDatabase getVerifiedUserDatabase() {
         return database;
-    }
-
-    private void sendWelcomeMessage() {
-        landingChannel.sendMessage(new MessageCreateBuilder()
-                .setEmbeds(new EmbedBuilder()
-                        .setTitle("Welcome to the Summer Madness Discord!")
-                        .setDescription("To get started, please read the rules a verify yourself by using the `/verify` command.")
-                        .setColor(Color.YELLOW)
-                        .build())
-                .build()).queue();
     }
 
     private void handleVerificationProcessInit(User user, JsonObject playerData) {

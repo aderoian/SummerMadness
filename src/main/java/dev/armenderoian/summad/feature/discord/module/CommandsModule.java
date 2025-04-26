@@ -6,7 +6,9 @@ import dev.armenderoian.summad.util.ServerConfig;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.InteractionContextType;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
@@ -112,6 +114,22 @@ public class CommandsModule extends DiscordModule {
                             failure -> logger.error("Failed to send leaderboard embed.", failure)
                     );
                 }
+        }
+    }
+
+    @Override
+    public void onMessageReceived(MessageReceivedEvent event) {
+        if (event.getAuthor().isBot()) return;
+        if (event.getChannelType() != ChannelType.TEXT) return;
+
+        var message = event.getMessage().getContentRaw();
+        if (message.equalsIgnoreCase("!messages_refresh")) {
+            if (event.getMember() == null) return;
+            if (!event.getMember().hasPermission(Permission.ADMINISTRATOR))
+                return;
+
+            event.getMessage().delete().queue();
+            DiscordFeature.MESSAGE_MODULE.editMessages();
         }
     }
 }
