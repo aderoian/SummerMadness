@@ -69,7 +69,7 @@ public class CommandsModule extends DiscordModule {
         if (!commands.contains(event.getName()))
             return;
 
-        event.deferReply(true).queue();
+        event.deferReply().queue();
 
         if (!canUserRunCommand(Objects.requireNonNull(event.getMember()))) {
             event.getHook().sendMessage("You do not have permission to run this command.").setEphemeral(true).queue();
@@ -97,7 +97,7 @@ public class CommandsModule extends DiscordModule {
                     if (userLink != null) {
                         var embed = leaderboard.toDiscordMessage(10, UUID.fromString(userLink.uuid));
                         if (embed != null) {
-                            event.getHook().sendMessageEmbeds(embed).setEphemeral(true).queue(
+                            event.getHook().sendMessageEmbeds(embed).queue(
                                     success -> {
                                     },
                                     failure -> logger.error("Failed to send leaderboard embed.", failure)
@@ -109,7 +109,7 @@ public class CommandsModule extends DiscordModule {
                         event.getHook().sendMessage("User not found or is not verified, please try again.").setEphemeral(true).queue();
                     }
                 } else {
-                    event.getHook().sendMessageEmbeds(leaderboardEmbed).setEphemeral(true).queue(
+                    event.getHook().sendMessageEmbeds(leaderboardEmbed).queue(
                             success -> {
                             },
                             failure -> logger.error("Failed to send leaderboard embed.", failure)
