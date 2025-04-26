@@ -1,26 +1,26 @@
 package dev.armenderoian.summad.feature.leaderboard.types;
 
-import dev.armenderoian.summad.util.TimeUtils;
+import java.text.NumberFormat;
 
-public class PlayTimeLeaderboard extends StatsBackedLeaderboard {
+public class MobKillsLeaderboard extends StatsBackedLeaderboard {
 
-    public PlayTimeLeaderboard() {
-        super("playtime", "Play Time", "The total amount of play time on the server.");
+    public MobKillsLeaderboard() {
+        super("mob_kills", "Mob Kills", "Total amount of mobs killed by a player.");
     }
 
     @Override
     protected String getStatsCategory() {
-        return "minecraft:custom";
+        return "minecraft:killed";
     }
 
     @Override
     protected String getStatsName() {
-        return "minecraft:play_time";
+        return "";
     }
 
     @Override
     protected boolean isSummedValue() {
-        return false;
+        return true;
     }
 
     @Override
@@ -35,6 +35,6 @@ public class PlayTimeLeaderboard extends StatsBackedLeaderboard {
 
     @Override
     protected String formatValue(LeaderboardEntry entry) {
-        return TimeUtils.formatTime("%d days, %d hours, %d minutes", entry.value() / 20);
+        return "Mobs: " + NumberFormat.getIntegerInstance().format(entry.value());
     }
 }

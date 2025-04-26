@@ -1,13 +1,16 @@
 package dev.armenderoian.summad.feature.leaderboard.types;
 
+import dev.armenderoian.summad.registry.ModFeatureContent;
+import net.minecraft.scoreboard.ScoreboardObjective;
+
 public class DeathCountLeaderboard extends ObjectiveBackedLeaderboard {
     public DeathCountLeaderboard() {
-        super("death_count", "Death Count", "The players with the lowest amount of deaths.");
+        super("death_count", "Death Count", "How many times players have died.");
     }
 
     @Override
     protected int compare(LeaderboardEntry entry1, LeaderboardEntry entry2) {
-        return -Integer.compare(entry2.value(), entry1.value());
+        return Integer.compare(entry2.value(), entry1.value());
     }
 
     @Override
@@ -18,5 +21,10 @@ public class DeathCountLeaderboard extends ObjectiveBackedLeaderboard {
     @Override
     protected String formatValue(LeaderboardEntry entry) {
         return "Deaths: " + entry.value();
+    }
+
+    @Override
+    public ScoreboardObjective getObjective() {
+        return ModFeatureContent.DEATH_FEATURE.getDeathObjective();
     }
 }

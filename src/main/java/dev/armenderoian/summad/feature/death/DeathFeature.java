@@ -1,7 +1,7 @@
 package dev.armenderoian.summad.feature.death;
 
-import dev.armenderoian.summad.SummerMadness;
 import dev.armenderoian.summad.feature.AbstractFeature;
+import dev.armenderoian.summad.util.ScoreboardUtils;
 import net.minecraft.scoreboard.ScoreboardCriterion;
 import net.minecraft.scoreboard.ScoreboardDisplaySlot;
 import net.minecraft.scoreboard.ScoreboardObjective;
@@ -20,7 +20,14 @@ public class DeathFeature extends AbstractFeature {
 
     @Override
     public void registerFeature() throws Exception {
-        deathScoreboard = getOrCreateScoreboard();
+        deathScoreboard = ScoreboardUtils.getOrCreateScoreboardObjective(new ScoreboardUtils.ScoreboardObjectiveBuilder()
+                .setName("deaths")
+                .setCriterion(ScoreboardCriterion.DEATH_COUNT)
+                .setDisplayName(Text.translatable("scoreboard.summermadness.deaths.name"))
+                .setRenderType(ScoreboardCriterion.RenderType.INTEGER)
+                .setDisplayAutoUpdate(true)
+                .setDisplaySlot(ScoreboardDisplaySlot.LIST)
+        );
     }
 
     public boolean reduceDeathCount(ServerPlayerEntity player) {
@@ -34,31 +41,6 @@ public class DeathFeature extends AbstractFeature {
             return true;
         }
         return false;
-    }
-
-    private ScoreboardObjective getOrCreateScoreboard() {
-        var server = SummerMadness.SERVER;
-        if (server == null) {
-            throw new IllegalStateException("Server is not initialized");
-        }
-
-        var scoreboard = server.getScoreboard();
-
-        var objective = scoreboard.getNullableObjective("deaths");
-        if (objective == null) {
-            objective = scoreboard.addObjective(
-                    "deaths",
-                    ScoreboardCriterion.DEATH_COUNT,
-                    Text.translatable("scoreboard.summermadness.deaths.name"),
-                    ScoreboardCriterion.RenderType.INTEGER,
-                    true,
-                    null
-            );
-
-            scoreboard.setObjectiveSlot(ScoreboardDisplaySlot.LIST, objective);
-        }
-
-        return objective;
     }
 
     public ScoreboardObjective getDeathObjective() {

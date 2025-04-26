@@ -3,10 +3,7 @@ package dev.armenderoian.summad.feature.leaderboard;
 import dev.armenderoian.summad.SummerMadness;
 import dev.armenderoian.summad.feature.AbstractFeature;
 import dev.armenderoian.summad.feature.discord.DiscordFeature;
-import dev.armenderoian.summad.feature.leaderboard.types.DeathCountLeaderboard;
-import dev.armenderoian.summad.feature.leaderboard.types.ObjectiveBackedLeaderboard;
-import dev.armenderoian.summad.feature.leaderboard.types.PlayTimeLeaderboard;
-import dev.armenderoian.summad.feature.leaderboard.types.StatsBackedLeaderboard;
+import dev.armenderoian.summad.feature.leaderboard.types.*;
 import dev.armenderoian.summad.util.ServerConfig;
 import net.minecraft.server.MinecraftServer;
 
@@ -19,9 +16,16 @@ public class LeaderboardFeature extends AbstractFeature {
     private static final Set<LeaderboardUpdater<?>> leaderboardUpdaters = new HashSet<>();
     private static final Set<Leaderboard<?>> leaderboards = new HashSet<>();
     public static StatsBackedLeaderboard.StatsBackedLeaderboardUpdater STATS_UPDATER = registerLeaderboardUpdater(new StatsBackedLeaderboard.StatsBackedLeaderboardUpdater());
-    public static ObjectiveBackedLeaderboard.ObjectiveBackedLeaderboardUpdater OBJECTIVE_UPDATER = registerLeaderboardUpdater(new ObjectiveBackedLeaderboard.ObjectiveBackedLeaderboardUpdater());
+    public static ObjectiveBackedLeaderboard.ObjectiveBackedLeaderboardUpdater DEATH_UPDATER = registerLeaderboardUpdater(new ObjectiveBackedLeaderboard.ObjectiveBackedLeaderboardUpdater());
+    public static ObjectiveBackedLeaderboard.ObjectiveBackedLeaderboardUpdater PLAYER_LEVEL_UPDATER = registerLeaderboardUpdater(new ObjectiveBackedLeaderboard.ObjectiveBackedLeaderboardUpdater());
+
     public static PlayTimeLeaderboard PLAY_TIME = registerLeaderboard(new PlayTimeLeaderboard(), STATS_UPDATER);
-    public static DeathCountLeaderboard DEATH_COUNT = registerLeaderboard(new DeathCountLeaderboard(), OBJECTIVE_UPDATER);
+    public static PlayerKillsLeaderboard PLAYER_KILLS = registerLeaderboard(new PlayerKillsLeaderboard(), STATS_UPDATER);
+    public static BlocksBrokenLeaderboard BLOCKS_BROKEN = registerLeaderboard(new BlocksBrokenLeaderboard(), STATS_UPDATER);
+    public static ItemsUsedLeaderboard ITEMS_USED = registerLeaderboard(new ItemsUsedLeaderboard(), STATS_UPDATER);
+    public static MobKillsLeaderboard MOB_KILLS = registerLeaderboard(new MobKillsLeaderboard(), STATS_UPDATER);
+    public static DeathCountLeaderboard DEATH_COUNT = registerLeaderboard(new DeathCountLeaderboard(), DEATH_UPDATER);
+    public static PlayerLevelLeaderboard PLAYER_LEVEL = registerLeaderboard(new PlayerLevelLeaderboard(), PLAYER_LEVEL_UPDATER);
 
     private ScheduledFuture<?> updateTask;
     private static final int updateInterval = ServerConfig.leaderboardUpdateInterval;

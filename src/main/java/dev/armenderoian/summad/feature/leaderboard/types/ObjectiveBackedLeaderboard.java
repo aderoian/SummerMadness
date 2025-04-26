@@ -1,12 +1,12 @@
 package dev.armenderoian.summad.feature.leaderboard.types;
 
-import dev.armenderoian.summad.SummerMadness;
+import dev.armenderoian.summad.feature.leaderboard.Leaderboard;
 import dev.armenderoian.summad.feature.leaderboard.LeaderboardUpdater;
-import dev.armenderoian.summad.registry.ModFeatureContent;
 import dev.armenderoian.summad.util.io.cache.DataCache;
 import dev.armenderoian.summad.util.io.cache.GenericDataCache;
 import dev.armenderoian.summad.util.io.cache.KnownPlayerCache;
 import net.minecraft.scoreboard.ScoreAccess;
+import net.minecraft.scoreboard.ScoreboardObjective;
 
 import java.util.UUID;
 
@@ -20,11 +20,9 @@ public abstract class ObjectiveBackedLeaderboard extends AbstractLeaderboard<Sco
         return cache.contains(uuid) ? cache.get(uuid).getScore() : 0;
     }
 
-    public static DataCache<UUID, ScoreAccess> createObjectiveCache() throws Exception {
-        var logger = SummerMadness.LOGGER;
-
+    public DataCache<UUID, ScoreAccess> createObjectiveCache() throws Exception {
         var cache = new GenericDataCache<UUID, ScoreAccess>();
-        var objective = ModFeatureContent.DEATH_FEATURE.getDeathObjective();
+        var objective = getObjective();
         var scoreboard = objective.getScoreboard();
         KnownPlayerCache.getKnownPlayers().forEach(player -> {
             var score = scoreboard.getOrCreateScore(player::name, objective);
@@ -33,11 +31,21 @@ public abstract class ObjectiveBackedLeaderboard extends AbstractLeaderboard<Sco
         return cache;
     }
 
+    public abstract ScoreboardObjective getObjective();
+
     public static class ObjectiveBackedLeaderboardUpdater extends LeaderboardUpdater<ScoreAccess> {
 
         @Override
+        public void registerLeaderboard(Leaderboard<ScoreAccess> leaderboard) {
+            if (!(leaderboard instanceof ObjectiveBackedLeaderboard)) {
+                throw new IllegalArgumentException("Leaderboard must be an instance of ObjectiveBackedLeaderboard");
+            }
+            super.registerLeaderboard(leaderboard);
+        }
+
+        @Override
         protected DataCache<UUID, ScoreAccess> createCache() throws Exception {
-            return createObjectiveCache();
+            return ((ObjectiveBackedLeaderboard) leaderboards.stream().findFirst().get()).createObjectiveCache();
         }
     }
 }

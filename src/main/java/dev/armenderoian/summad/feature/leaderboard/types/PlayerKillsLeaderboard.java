@@ -1,21 +1,21 @@
 package dev.armenderoian.summad.feature.leaderboard.types;
 
-import dev.armenderoian.summad.util.TimeUtils;
+import java.text.NumberFormat;
 
-public class PlayTimeLeaderboard extends StatsBackedLeaderboard {
+public class PlayerKillsLeaderboard extends StatsBackedLeaderboard {
 
-    public PlayTimeLeaderboard() {
-        super("playtime", "Play Time", "The total amount of play time on the server.");
+    public PlayerKillsLeaderboard() {
+        super("player_kills", "Player Kills", "To total amount of player opponents killed by a player.");
     }
 
     @Override
     protected String getStatsCategory() {
-        return "minecraft:custom";
+        return "minecraft:killed";
     }
 
     @Override
     protected String getStatsName() {
-        return "minecraft:play_time";
+        return "minecraft:player";
     }
 
     @Override
@@ -35,6 +35,6 @@ public class PlayTimeLeaderboard extends StatsBackedLeaderboard {
 
     @Override
     protected String formatValue(LeaderboardEntry entry) {
-        return TimeUtils.formatTime("%d days, %d hours, %d minutes", entry.value() / 20);
+        return "Kills: " + NumberFormat.getIntegerInstance().format(entry.value());
     }
 }

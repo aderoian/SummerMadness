@@ -97,7 +97,7 @@ public class CommandsModule extends DiscordModule {
                     if (userLink != null) {
                         var embed = leaderboard.toDiscordMessage(10, UUID.fromString(userLink.uuid));
                         if (embed != null) {
-                            event.getHook().sendMessageEmbeds(leaderboardEmbed).setEphemeral(true).queue(
+                            event.getHook().sendMessageEmbeds(embed).setEphemeral(true).queue(
                                     success -> {
                                     },
                                     failure -> logger.error("Failed to send leaderboard embed.", failure)
@@ -117,7 +117,7 @@ public class CommandsModule extends DiscordModule {
                 }
                 break;
             case "players":
-                MessageModule.PLAYERS_MESSAGE.tryReplyMessage(event.getHook());
+                MessageModule.PLAYERS_MESSAGE.tryReplyMessage(event.getHook(), false);
                 break;
         }
     }
