@@ -73,8 +73,7 @@ public class VerificationModule extends DiscordModule {
             throw new IllegalStateException("Verification channel not found");
         }
 
-        Objects.requireNonNull(jda.getGuildById(ServerConfig.discordGuildId))
-                        .upsertCommand(Commands.slash("verify", "Verify yourself to get access to the server")
+        guild.upsertCommand(Commands.slash("verify", "Verify yourself to get access to the server")
                                 .setContexts(InteractionContextType.GUILD)
                                 .setDefaultPermissions(DefaultMemberPermissions.ENABLED)
                                 .addOption(OptionType.STRING, "username", "Your Minecraft Java username.", true)).queue(
@@ -160,6 +159,12 @@ public class VerificationModule extends DiscordModule {
             var username = fields.get(1).getValue();
             var uuid = fields.get(2).getValue();
 
+            var userData = database.findByUuid(uuid);
+            if (userData == null) {
+                logger.error("User data not found for uuid: {}", uuid);
+                return;
+            }
+
             var editedEmbed = createMemberManagementEmbed(user, username, uuid, Objects.requireNonNull(embed.getImage()).getUrl(), verified, false, false);
             message.editMessage(new MessageEditBuilder()
                     .setEmbeds(editedEmbed)
@@ -168,12 +173,6 @@ public class VerificationModule extends DiscordModule {
                             Button.danger("verify_revoke", "Revoke Verification")) :
                             List.of(Button.success("verify_success", "Verify")))
                     .build()).queue();
-
-            var userData = database.findByUuid(uuid);
-            if (userData == null) {
-                logger.error("User data not found for uuid: {}", uuid);
-                return;
-            }
 
             if (verified) {
                 database.verifyPlayer(uuid);
@@ -200,6 +199,12 @@ public class VerificationModule extends DiscordModule {
 
             var username = fields.get(1).getValue();
             var uuid = fields.get(2).getValue();
+
+            var userData = database.findByUuid(uuid);
+            if (userData == null) {
+                logger.error("User data not found for uuid: {}", uuid);
+                return;
+            }
 
             var editedEmbed = createMemberManagementEmbed(user, username, uuid, Objects.requireNonNull(embed.getImage()).getUrl(), true, whitelist, false);
             message.editMessage(new MessageEditBuilder()

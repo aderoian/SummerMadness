@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -22,6 +23,8 @@ public class CommandsModule extends DiscordModule {
 
     private Role[] allowedRoles;
     private Role[] disallowedRoles;
+
+    private final List<String> commands = List.of("join", "leaderboard");
 
     @Override
     protected void start() throws Exception {
@@ -58,6 +61,9 @@ public class CommandsModule extends DiscordModule {
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
+        if (!commands.contains(event.getName()))
+            return;
+
         event.deferReply(true).queue();
 
         if (!canUserRunCommand(Objects.requireNonNull(event.getMember()))) {
