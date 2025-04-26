@@ -6,5 +6,11 @@
   "item.summermadness.death_reset_item": "Death Reset",
   "item.summermadness.death_reset_item.desc": "Use this item to decreases your death count by one.",
 
-  "itemgroup.summermadness": "Summer Modded"
+  "item.summermadness.death_reset_item.toast.title": "Death Reset",
+  "item.summermadness.death_reset_item.toast.desc": "Your deaths have been decreased by one.",
+
+  "itemgroup.summermadness": "Summer Modded",
+
+  "toast.summermadness.in_combat": "You are in combat!",
+  "toast.summermadness.out_of_combat": "You are no longer in combat!"
 }
