@@ -9,10 +9,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class PersistentMessage extends AbstractMessage {
+
+    private final String channelId;
     private @Nullable String messageId = null;
 
     public PersistentMessage(String id, String channelId) {
-        super(id, channelId);
+        super(id);
+        this.channelId = channelId;
+    }
+
+    public String getChannelId() {
+        return channelId;
     }
 
     public @Nullable String getMessageId() {
@@ -21,11 +28,10 @@ public abstract class PersistentMessage extends AbstractMessage {
 
     public abstract MessageCreateData createMessage();
 
-    @Override
     public void trySendMessage(Guild guild) {
         if (messageId != null) return;
 
-        sendMessage(guild).thenApply(message -> {
+        sendMessage(guild, channelId).thenApply(message -> {
             if (message != null) {
                 messageId = message.getId();
                 return message;
@@ -36,9 +42,9 @@ public abstract class PersistentMessage extends AbstractMessage {
     }
 
     @Override
-    protected CompletableFuture<@Nullable Message> sendMessage(Guild guild) {
+    protected CompletableFuture<@Nullable Message> sendMessage(Guild guild, String channelId) {
         if (messageId == null) {
-            return super.sendMessage(guild);
+            return super.sendMessage(guild, channelId);
         } else {
             return CompletableFuture.completedFuture(null);
         }

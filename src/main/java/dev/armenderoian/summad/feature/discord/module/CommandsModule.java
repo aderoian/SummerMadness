@@ -26,7 +26,7 @@ public class CommandsModule extends DiscordModule {
     private Role[] allowedRoles;
     private Role[] disallowedRoles;
 
-    private final List<String> commands = List.of("join", "leaderboard");
+    private final List<String> commands = List.of("join", "leaderboard", "players");
 
     @Override
     protected void start() throws Exception {
@@ -39,6 +39,9 @@ public class CommandsModule extends DiscordModule {
                 .addOptions(new OptionData(OptionType.STRING, "name", "The leaderboard you wish to view.", true)
                                 .addChoices(LeaderboardFeature.getLeaderboards().stream().map(lb -> new Command.Choice(lb.getName(), lb.getId())).toList()),
                         new OptionData(OptionType.USER, "user", "See a user's position on the leaderboard", false))).queue();
+        guild.upsertCommand(Commands.slash("players", "View the current players on the server.")
+                .setContexts(InteractionContextType.GUILD)
+                .setDefaultPermissions(DefaultMemberPermissions.ENABLED)).queue();
 
         allowedRoles = Arrays.stream(ServerConfig.allowedCommandRoles).map(id -> guild.getRoleById(id)).toArray(Role[]::new);
         disallowedRoles = Arrays.stream(ServerConfig.disallowedCommandRoles).map(id -> guild.getRoleById(id)).toArray(Role[]::new);
@@ -75,15 +78,13 @@ public class CommandsModule extends DiscordModule {
 
         switch (event.getName()) {
             case "join":
-                event.reply("Server IP: " + ServerConfig.serverIp)
-                        .setEphemeral(true)
-                        .queue();
+                MessageModule.JOIN_MESSAGE.tryReplyMessage(event.getHook());
                 break;
             case "leaderboard":
                 var leaderboardId = Objects.requireNonNull(event.getOption("name")).getAsString();
                 var leaderboard = LeaderboardFeature.getLeaderboards().stream().filter(lb -> lb.getId().equals(leaderboardId)).findFirst().orElse(null);
                 if (leaderboard == null) {
-                    event.reply("Leaderboard not found.").setEphemeral(true).queue();
+                    event.getHook().sendMessage("Leaderboard not found.").setEphemeral(true).queue();
                     return;
                 }
 
@@ -96,24 +97,28 @@ public class CommandsModule extends DiscordModule {
                     if (userLink != null) {
                         var embed = leaderboard.toDiscordMessage(10, UUID.fromString(userLink.uuid));
                         if (embed != null) {
-                            event.replyEmbeds(leaderboardEmbed).setEphemeral(true).queue(
+                            event.getHook().sendMessageEmbeds(leaderboardEmbed).setEphemeral(true).queue(
                                     success -> {
                                     },
                                     failure -> logger.error("Failed to send leaderboard embed.", failure)
                             );
                         } else {
-                            event.reply("User not found on the leaderboard.").setEphemeral(true).queue();
+                            event.getHook().sendMessage("User not found on the leaderboard.").setEphemeral(true).queue();
                         }
                     } else {
-                        event.reply("User not found or is not verified, please try again.").setEphemeral(true).queue();
+                        event.getHook().sendMessage("User not found or is not verified, please try again.").setEphemeral(true).queue();
                     }
                 } else {
-                    event.replyEmbeds(leaderboardEmbed).setEphemeral(true).queue(
+                    event.getHook().sendMessageEmbeds(leaderboardEmbed).setEphemeral(true).queue(
                             success -> {
                             },
                             failure -> logger.error("Failed to send leaderboard embed.", failure)
                     );
                 }
+                break;
+            case "players":
+                MessageModule.PLAYERS_MESSAGE.tryReplyMessage(event.getHook());
+                break;
         }
     }
 

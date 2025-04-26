@@ -2,6 +2,8 @@ package dev.armenderoian.summad.feature.discord.module;
 
 import com.google.gson.GsonBuilder;
 import dev.armenderoian.summad.SummerMadness;
+import dev.armenderoian.summad.feature.discord.message.JoinMessage;
+import dev.armenderoian.summad.feature.discord.message.PlayersMessage;
 import dev.armenderoian.summad.feature.discord.message.persistent.LandingPageMessage;
 import dev.armenderoian.summad.feature.discord.message.persistent.PersistentMessage;
 import dev.armenderoian.summad.feature.discord.message.persistent.RulesMessage;
@@ -18,6 +20,10 @@ import java.util.Map;
 public class MessageModule extends DiscordModule {
 
     private PersistentMessageDatabase database;
+
+    public static JoinMessage JOIN_MESSAGE = new JoinMessage();
+    public static PlayersMessage PLAYERS_MESSAGE = new PlayersMessage();
+
     @Override
     protected void start() throws Exception {
         List<PersistentMessage> messages = List.of(
