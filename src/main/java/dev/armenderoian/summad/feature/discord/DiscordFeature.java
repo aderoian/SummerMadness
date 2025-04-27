@@ -40,6 +40,7 @@ public class DiscordFeature extends AbstractFeature {
     public void onStart(MinecraftServer server) throws Exception {
         if (!server.isDedicated()) {
             logger.info("Not a dedicated server, skipping Discord feature registration.");
+            return;
         }
 
         var token = ServerConfig.discordToken;
@@ -53,6 +54,9 @@ public class DiscordFeature extends AbstractFeature {
 
     @Override
     public void onStop() throws Exception {
+        if (!SummerMadness.SERVER.isDedicated())
+            return;
+
         logger.info("Disabling Discord feature...");
         logger.info("Stopping modules...");
         modules.forEach((name, module) -> {
