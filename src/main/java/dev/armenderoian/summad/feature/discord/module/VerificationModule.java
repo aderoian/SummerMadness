@@ -6,6 +6,7 @@ import dev.armenderoian.summad.SummerMadness;
 import dev.armenderoian.summad.util.ServerConfig;
 import dev.armenderoian.summad.util.io.database.JSONProvider;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
@@ -232,6 +233,39 @@ public class VerificationModule extends DiscordModule {
                 .addField("Verification Status", !pending ? verified ? "Verified" : "Denied" : "Pending...", false)
                 .addField("Whitelist Status", whitelist, true)
                 .build();
+    }
+
+    public void resetUserVerification(Member member) {
+        var userData = database.findByDiscordId(member.getId());
+        if (userData == null) {
+            logger.error("User data not found for discord id: {}", member.getId());
+            return;
+        }
+
+        var messageId = userData.managementMessageId;
+        if (messageId == null) {
+            logger.error("User data does not contain message id for discord id: {}", member.getId());
+            return;
+        }
+
+        memberManagementChannel.retrieveMessageById(messageId).queue(message -> {
+            var embed = message.getEmbeds().getFirst();
+            if (embed == null) {
+                logger.error("No embed found in message");
+                return;
+            }
+
+            var user = member.getUser();
+            for (int i = 0; i < verificationRolesToAdd.length; i++) {
+                guild.removeRoleFromMember(user, verificationRolesToAdd[i]).queue();
+                guild.addRoleToMember(user, verificationRolesToRemove[i]).queue();
+            }
+
+            database.removePlayer(member.getId());
+            message.delete().queue();
+        }, throwable -> {
+            logger.error("Failed to retrieve message", throwable);
+        });
     }
 
     @Override
