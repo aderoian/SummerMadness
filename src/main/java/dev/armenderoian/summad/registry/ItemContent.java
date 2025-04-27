@@ -10,9 +10,6 @@ import net.minecraft.util.Rarity;
 
 public class ItemContent {
 
-    public static final Item BUGS_MUSIC_DISK = registerItem("bugs_music_disc",
-            new Item(new Item.Settings().rarity(Rarity.RARE).jukeboxPlayable(SoundContent.BUGS_SONG_KEY).maxCount(1)));
-
     public static final Item DEATH_RESET_ITEM = registerItem("death_reset_item",
             new DeathResetItem(new Item.Settings().rarity(Rarity.RARE).maxCount(1)));
 

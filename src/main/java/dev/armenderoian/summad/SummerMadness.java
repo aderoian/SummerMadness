@@ -58,10 +58,6 @@ public class SummerMadness implements ModInitializer {
 
         ItemContent.registerItems();
 
-        SoundContent.registerSounds();
-
-        LootTableContent.registerLootTables();
-
         NETWORK.registerClientboundDeferred(ClientboundPacket.ClientboundCombatToast.class);
     }
 

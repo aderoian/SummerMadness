@@ -12,10 +12,9 @@ import net.minecraft.util.Identifier;
 public class ItemGroupContent {
 
     public static ItemGroup SUMMER_MODDED_GROUP = registerItemGroup("summermadness_group",
-            FabricItemGroup.builder().icon(() -> new ItemStack(ItemContent.BUGS_MUSIC_DISK))
+            FabricItemGroup.builder().icon(() -> new ItemStack(ItemContent.DEATH_RESET_ITEM))
                     .displayName(Text.translatable("itemgroup.summermadness"))
                     .entries((displayContext, entries) -> {
-                        entries.add(ItemContent.BUGS_MUSIC_DISK);
                         entries.add(ItemContent.DEATH_RESET_ITEM);
                     })
                     .build());
