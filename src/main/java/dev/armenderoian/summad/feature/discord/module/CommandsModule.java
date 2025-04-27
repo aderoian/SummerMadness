@@ -135,20 +135,15 @@ public class CommandsModule extends DiscordModule {
 
             event.getMessage().delete().queue();
             DiscordFeature.MESSAGE_MODULE.editMessages();
-        } else if (message.equalsIgnoreCase("!verify_reset")) {
+        } else if (message.startsWith("!verify_reset")) {
             if (event.getMember() == null) return;
             if (!event.getMember().hasPermission(Permission.ADMINISTRATOR))
                 return;
 
             var args = message.split(" ");
-            if (args.length < 2) {
-                return;
-            }
-
+            if (args.length < 2) return;
             var user = event.getGuild().getMemberById(args[1]);
-            if (user == null) {
-                return;
-            }
+            if (user == null) return;
 
             DiscordFeature.VERIFICATION_MODULE.resetUserVerification(user);
         }
