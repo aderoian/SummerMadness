@@ -13,11 +13,8 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
-import net.dv8tion.jda.api.interactions.InteractionContextType;
 import net.dv8tion.jda.api.interactions.InteractionType;
-import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 import net.dv8tion.jda.api.utils.messages.MessageEditBuilder;
@@ -55,14 +52,6 @@ public class VerificationModule extends DiscordModule {
         if (memberManagementChannel == null) {
             throw new IllegalStateException("Verification channel not found");
         }
-
-        guild.upsertCommand(Commands.slash("verify", "Verify yourself to get access to the server")
-                                .setContexts(InteractionContextType.GUILD)
-                                .setDefaultPermissions(DefaultMemberPermissions.ENABLED)
-                                .addOption(OptionType.STRING, "username", "Your Minecraft Java username.", true)).queue(
-                                        success -> {},
-                                        throwable -> logger.error("Failed to register command", throwable)
-                );
 
         verificationRolesToAdd = Arrays.stream(ServerConfig.verificationRolesToAdd)
                 .map(roleId -> Objects.requireNonNull(guild.getRoleById(roleId)))

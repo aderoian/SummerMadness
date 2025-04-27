@@ -30,19 +30,27 @@ public class CommandsModule extends DiscordModule {
 
     @Override
     protected void start() throws Exception {
-        guild.upsertCommand(Commands.slash("join", "Get the information to join the server.")
-                .setContexts(InteractionContextType.GUILD)
-                .setDefaultPermissions(DefaultMemberPermissions.ENABLED)).queue();
-        guild.upsertCommand(Commands.slash("leaderboard", "View leaderboard information.")
-                .setContexts(InteractionContextType.GUILD)
-                .setDefaultPermissions(DefaultMemberPermissions.ENABLED)
-                .addOptions(new OptionData(OptionType.STRING, "name", "The leaderboard you wish to view.", true)
-                                .addChoices(LeaderboardFeature.getLeaderboards().stream().map(lb -> new Command.Choice(lb.getName(), lb.getId())).toList()),
-                        new OptionData(OptionType.USER, "user", "See a user's position on the leaderboard", false))).queue();
-        guild.upsertCommand(Commands.slash("players", "View the current players on the server.")
-                .setContexts(InteractionContextType.GUILD)
-                .setDefaultPermissions(DefaultMemberPermissions.ENABLED)).queue();
-
+        guild.updateCommands().addCommands(
+                Commands.slash("verify", "Verify yourself to get access to the server")
+                    .setContexts(InteractionContextType.GUILD)
+                    .setDefaultPermissions(DefaultMemberPermissions.ENABLED)
+                    .addOption(OptionType.STRING, "username", "Your Minecraft Java username.", true),
+                Commands.slash("join", "Get the information to join the server.")
+                        .setContexts(InteractionContextType.GUILD)
+                        .setDefaultPermissions(DefaultMemberPermissions.ENABLED),
+                Commands.slash("leaderboard", "View leaderboard information.")
+                        .setContexts(InteractionContextType.GUILD)
+                        .setDefaultPermissions(DefaultMemberPermissions.ENABLED)
+                        .addOptions(
+                                new OptionData(OptionType.STRING, "name", "The leaderboard you wish to view.", true)
+                                        .addChoices(LeaderboardFeature.getLeaderboards().stream().map(lb -> new Command.Choice(lb.getName(), lb.getId())).toList()),
+                                new OptionData(OptionType.USER, "user", "See a user's position on the leaderboard", false)),
+                Commands.slash("players", "View the current players on the server.")
+                        .setContexts(InteractionContextType.GUILD)
+                        .setDefaultPermissions(DefaultMemberPermissions.ENABLED)
+                ).queue(
+                success -> {},
+                throwable -> logger.error("Failed to register command(s)", throwable));
         allowedRoles = Arrays.stream(ServerConfig.allowedCommandRoles).map(id -> guild.getRoleById(id)).toArray(Role[]::new);
         disallowedRoles = Arrays.stream(ServerConfig.disallowedCommandRoles).map(id -> guild.getRoleById(id)).toArray(Role[]::new);
 
@@ -50,9 +58,9 @@ public class CommandsModule extends DiscordModule {
     }
 
     public boolean canUserRunCommand(Member member) {
-        if (member.getRoles().stream().anyMatch(role -> Arrays.asList(allowedRoles).contains(role))) {
+        if (member.getRoles().stream().anyMatch(role -> Arrays.asList(disallowedRoles).contains(role))) {
             return false;
-        } else if (member.getRoles().stream().anyMatch(role -> Arrays.asList(disallowedRoles).contains(role))) {
+        } else if (member.getRoles().stream().anyMatch(role -> Arrays.asList(allowedRoles).contains(role))) {
             return true;
         } else {
             return member.hasPermission(Permission.ADMINISTRATOR);
