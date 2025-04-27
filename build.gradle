@@ -1,6 +1,8 @@
 plugins {
+    id 'java'
     id 'fabric-loom' version '1.10-SNAPSHOT'
     id 'maven-publish'
+    id("com.gradleup.shadow") version "8.3.3"
 }
 
 version = project.mod_version
@@ -33,14 +35,16 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation include ("maven.modrinth:midnightlib:${project.midnightlib_version}")
+    modImplementation ("maven.modrinth:midnightlib:${project.midnightlib_version}")
 
     modRuntimeOnly "maven.modrinth:carpet:${project.carpet_version}"
 
-    implementation("net.dv8tion:JDA:${project.jda_version}")
+    shadow(implementation("net.dv8tion:JDA:${project.jda_version}")) {
+        exclude module: "opus-java"
+        exclude module: "tink"
+    }
 
     modImplementation "io.wispforest:owo-lib:${project.owo_version}"
-    include "io.wispforest:owo-sentinel:${project.owo_version}"
 }
 
 processResources {
@@ -87,6 +91,25 @@ jar {
     from("LICENSE") {
         rename { "${it}_${project.archivesBaseName}" }
     }
+}
+
+shadowJar {
+    archiveClassifier = "shadow"
+    configurations = [project.configurations.shadow]
+
+    minimize() // minimize aggressively (optional)
+
+    exclude("META-INF/*.kotlin_module")
+    exclude("kotlin/**")
+    exclude("org/slf4j/**")
+    exclude("ch/qos/logback/**")
+    exclude("META-INF/maven/org.slf4j/**")
+    exclude("META-INF/maven/ch.qos.logback/**")
+}
+
+remapJar {
+    dependsOn(shadowJar)
+    inputFile = tasks.shadowJar.archiveFile
 }
 
 // configure the maven publication
