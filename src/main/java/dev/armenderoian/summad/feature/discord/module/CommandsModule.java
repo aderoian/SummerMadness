@@ -150,7 +150,7 @@ public class CommandsModule extends DiscordModule {
                 return;
             }
 
-            DiscordFeature.VERIFICATION_MODULE.resetVerification();
+            DiscordFeature.VERIFICATION_MODULE.resetUserVerification(user);
         }
     }
 }
