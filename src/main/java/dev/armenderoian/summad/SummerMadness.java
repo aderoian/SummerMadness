@@ -48,7 +48,6 @@ public class SummerMadness implements ModInitializer {
             }
         });
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            SERVER = null;
             onDisable();
         });
 
