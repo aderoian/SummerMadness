@@ -104,44 +104,54 @@ public class VerificationModule extends DiscordModule {
 
             var fields = embed.getFields();
             var userMention = Objects.requireNonNull(fields.getFirst().getValue());
-            var user = Objects.requireNonNull(guild.getMemberById(userMention.substring(2, userMention.length() - 1))).getUser();
+            guild.retrieveMemberById(userMention.substring(2, userMention.length() - 1))
+                    .queue(member -> {
+                                if (member == null) {
+                                    logger.error("User not found: {} ({})", userMention, userMention.substring(2, userMention.length() - 1));
+                                    return;
+                                }
 
-            if (verified) {
-                for (int i = 0; i < verificationRolesToAdd.length; i++) {
-                    guild.addRoleToMember(user, verificationRolesToAdd[i]).queue();
-                    guild.removeRoleFromMember(user, verificationRolesToRemove[i]).queue();
-                }
-            } else {
-                for (int i = 0; i < verificationRolesToAdd.length; i++) {
-                    guild.removeRoleFromMember(user, verificationRolesToAdd[i]).queue();
-                    guild.addRoleToMember(user, verificationRolesToRemove[i]).queue();
-                }
-            }
+                                var user = member.getUser();
+                                if (verified) {
+                                    for (int i = 0; i < verificationRolesToAdd.length; i++) {
+                                        guild.addRoleToMember(user, verificationRolesToAdd[i]).queue();
+                                        guild.removeRoleFromMember(user, verificationRolesToRemove[i]).queue();
+                                    }
+                                } else {
+                                    for (int i = 0; i < verificationRolesToAdd.length; i++) {
+                                        guild.removeRoleFromMember(user, verificationRolesToAdd[i]).queue();
+                                        guild.addRoleToMember(user, verificationRolesToRemove[i]).queue();
+                                    }
+                                }
 
-            var username = fields.get(1).getValue();
-            var uuid = fields.get(2).getValue();
+                                var username = fields.get(1).getValue();
+                                var uuid = fields.get(2).getValue();
 
-            var userData = database.findByUuid(uuid);
-            if (userData == null) {
-                logger.error("User data not found for uuid: {}", uuid);
-                return;
-            }
+                                var userData = database.findByUuid(uuid);
+                                if (userData == null) {
+                                    logger.error("User data not found for uuid: {}", uuid);
+                                    return;
+                                }
 
-            var editedEmbed = createMemberManagementEmbed(user, username, uuid, Objects.requireNonNull(embed.getImage()).getUrl(), verified, false, false);
-            message.editMessage(new MessageEditBuilder()
-                    .setEmbeds(editedEmbed)
-                    .setActionRow(verified ? List.of(
-                            Button.success("whitelist_add", "Add to Whitelist"),
-                            Button.danger("verify_revoke", "Revoke Verification")) :
-                            List.of(Button.success("verify_success", "Verify")))
-                    .build()).queue();
+                                var editedEmbed = createMemberManagementEmbed(user, username, uuid, Objects.requireNonNull(embed.getImage()).getUrl(), verified, false, false);
+                                message.editMessage(new MessageEditBuilder()
+                                        .setEmbeds(editedEmbed)
+                                        .setActionRow(verified ? List.of(
+                                                Button.success("whitelist_add", "Add to Whitelist"),
+                                                Button.danger("verify_revoke", "Revoke Verification")) :
+                                                List.of(Button.success("verify_success", "Verify")))
+                                        .build()).queue();
 
-            if (verified) {
-                database.verifyPlayer(uuid);
-            } else {
-                database.unVerifyPlayer(uuid);
-            }
-            updateWhitelistStatus(uuid, username, false); // Unwhitelist the player on verification change
+                                if (verified) {
+                                    database.verifyPlayer(uuid);
+                                } else {
+                                    database.unVerifyPlayer(uuid);
+                                }
+                                updateWhitelistStatus(uuid, username, false); // Unwhitelist the player on verification change
+                            },
+                            throwable -> {
+                                logger.error("Failed to retrieve member", throwable);
+                            });
         }, throwable -> {
             logger.error("Failed to retrieve message", throwable);
         });
@@ -157,26 +167,36 @@ public class VerificationModule extends DiscordModule {
 
             var fields = embed.getFields();
             var userMention = Objects.requireNonNull(fields.getFirst().getValue());
-            var user = Objects.requireNonNull(guild.getMemberById(userMention.substring(2, userMention.length() - 1))).getUser();
+            guild.retrieveMemberById(userMention.substring(2, userMention.length() - 1))
+                    .queue(member -> {
+                                if (member == null) {
+                                    logger.error("User not found: {} ({})", userMention, userMention.substring(2, userMention.length() - 1));
+                                    return;
+                                }
 
-            var username = fields.get(1).getValue();
-            var uuid = fields.get(2).getValue();
+                                var user = member.getUser();
+                                var username = fields.get(1).getValue();
+                                var uuid = fields.get(2).getValue();
 
-            var userData = database.findByUuid(uuid);
-            if (userData == null) {
-                logger.error("User data not found for uuid: {}", uuid);
-                return;
-            }
+                                var userData = database.findByUuid(uuid);
+                                if (userData == null) {
+                                    logger.error("User data not found for uuid: {}", uuid);
+                                    return;
+                                }
 
-            var editedEmbed = createMemberManagementEmbed(user, username, uuid, Objects.requireNonNull(embed.getImage()).getUrl(), true, whitelist, false);
-            message.editMessage(new MessageEditBuilder()
-                    .setEmbeds(editedEmbed)
-                    .setActionRow(List.of(
-                            whitelist ? Button.danger("whitelist_remove", "Remove from Whitelist") : Button.success("whitelist_add", "Add to Whitelist"),
-                            Button.danger("verify_revoke", "Revoke Verification")))
-                    .build()).queue();
+                                var editedEmbed = createMemberManagementEmbed(user, username, uuid, Objects.requireNonNull(embed.getImage()).getUrl(), true, whitelist, false);
+                                message.editMessage(new MessageEditBuilder()
+                                        .setEmbeds(editedEmbed)
+                                        .setActionRow(List.of(
+                                                whitelist ? Button.danger("whitelist_remove", "Remove from Whitelist") : Button.success("whitelist_add", "Add to Whitelist"),
+                                                Button.danger("verify_revoke", "Revoke Verification")))
+                                        .build()).queue();
 
-            updateWhitelistStatus(uuid, username, whitelist);
+                                updateWhitelistStatus(uuid, username, whitelist);
+                            },
+                            throwable -> {
+                                logger.error("Failed to retrieve member", throwable);
+                            });
         }, throwable -> {
             logger.error("Failed to retrieve message", throwable);
         });
@@ -249,6 +269,8 @@ public class VerificationModule extends DiscordModule {
                 guild.removeRoleFromMember(user, verificationRolesToAdd[i]).queue();
                 guild.addRoleToMember(user, verificationRolesToRemove[i]).queue();
             }
+
+            updateWhitelistStatus(embed.getFields().get(2).getValue(), embed.getFields().get(1).getValue(), false);
 
             database.removePlayer(member.getId());
             message.delete().queue();
